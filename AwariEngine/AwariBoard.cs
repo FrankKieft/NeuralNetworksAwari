@@ -8,10 +8,11 @@ namespace AwariEngine
     {
         private const int SOUTH_AWARI = 12;
         private const int NORTH_AWARI = 13;
-        private readonly string[] _pits = new[] { "A", "B", "C", "D", "E", "F", "a", "b", "c", "d", "e", "f" };
+        private static readonly string[] _pits = new[] { "A", "B", "C", "D", "E", "F", "a", "b", "c", "d", "e", "f" };
         private int[] _position;
         private List<int[]> _history;
         private readonly Player _initialFirstMove;
+        private Func<string, int> GetIndex = pit => Array.IndexOf(_pits, pit);
 
         public AwariBoard(
             int A, int B, int C, int D, int E, int F, 
@@ -47,10 +48,28 @@ namespace AwariEngine
             }
         }
 
-        public void Move(int pit)
+        public bool CanSow(string pit)
+        {
+            var i = GetIndex(pit);
+
+            return _position[i] > 0;
+        }
+
+        public void Sow(string pit)
         {
             int[] previous = new int[14];
             _position.CopyTo(previous, 0);
+
+            var i = GetIndex(pit);
+
+            var stones = _position[i];
+            _position[i] = 0;
+            while (stones>0)
+            {
+                i = i < 11 ? i + 1 : 0;
+                _position[i]++;
+                stones--;
+            }
 
             _history.Add(previous);
         }

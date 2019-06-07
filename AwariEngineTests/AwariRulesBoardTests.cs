@@ -63,11 +63,9 @@ namespace AwariEngineTests
         [TestMethod]
         public void All_48_stones_must_always_be_somewhere()
         {
-            // Arrange
             Action validPosition = () => new AwariBoard(3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6, 6);
             Action invalidPosition = () => new AwariBoard(10, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6, 6);
 
-            // Act & Assert
             validPosition.Should().NotThrow<Exception>();
             invalidPosition.Should().Throw<ArgumentException>().WithMessage("AwariBoard should always contain 48 stones.");
         }
