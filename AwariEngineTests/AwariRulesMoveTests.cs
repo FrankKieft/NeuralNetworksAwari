@@ -56,9 +56,9 @@ namespace AwariEngineTests
         [TestMethod]
         public void The_original_pit_is_skipped_whenever_it_is_encountered()
         {
-            var board = new AwariBoard(3, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6, 9);
-
-
+            var board = new AwariBoard(3, 0, 3, 3, 15, 3, 3, 3, 3, 3, 3, 3, 1, 2);
+            board.Sow("E");
+            board.Pits["E"].Should().Be(0);
         }
     }
 }

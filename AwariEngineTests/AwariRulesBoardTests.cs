@@ -67,7 +67,7 @@ namespace AwariEngineTests
             Action invalidPosition = () => new AwariBoard(10, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6, 6);
 
             validPosition.Should().NotThrow<Exception>();
-            invalidPosition.Should().Throw<ArgumentException>().WithMessage("AwariBoard should always contain 48 stones.");
+            invalidPosition.Should().Throw<ArgumentException>().WithMessage("AwariBoard should always contain 48 stones while 55 stones are passed.");
         }
     }
 }

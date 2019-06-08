@@ -25,7 +25,7 @@ namespace AwariEngine
 
             if (TotalStones != 48)
             {
-                throw new ArgumentException("AwariBoard should always contain 48 stones.");
+                throw new ArgumentException($"AwariBoard should always contain 48 stones while {TotalStones} stones are passed.");
             }
         }
 

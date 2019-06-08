@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AwariEngine
 {
@@ -7,6 +8,7 @@ namespace AwariEngine
         public const int SOUTH_AWARI = 12;
         public const int NORTH_AWARI = 13;
         private static readonly string[] _pits = new[] { "A", "B", "C", "D", "E", "F", "a", "b", "c", "d", "e", "f" };
+        private Func<int, int> NextPit = (x) => x += x < 11 ? 1 : -11;
         
         public AwariPosition(
             int A, int B, int C, int D, int E, int F, 
@@ -34,10 +36,13 @@ namespace AwariEngine
 
             var stones = Position[pit];
             Position[pit] = 0;
+
+            var p = pit;
             while (stones>0)
             {
-                pit = pit < 11 ? pit + 1 : 0;
-                Position[pit]++;
+                p = NextPit(p);
+                if (p == pit) p=NextPit(p);
+                Position[p]++;
                 stones--;
             }
 
