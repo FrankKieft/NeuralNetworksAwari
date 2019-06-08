@@ -21,7 +21,7 @@ namespace AwariEngine
             int southAwari, int northAwari, 
             Player firstToMove = Player.South)
         {
-            _position = new AwariPosition( A, B, C, D, E, F, a, b, c, d, e, f, southAwari, northAwari );
+            _position = new AwariPosition( A, B, C, D, E, F, a, b, c, d, e, f, southAwari, northAwari, firstToMove==Player.South );
 
             if (TotalStones != 48)
             {
@@ -35,7 +35,7 @@ namespace AwariEngine
         {
             get
             {
-                return _position.History.Count % 2 == 0 || _position.InitialFirstMove == Player.North ? Player.South : Player.North;
+                return _position.SouthToMove ? Player.South : Player.North;
             }
         }
         public int TotalStones { get { return _position.Position.Sum(); } }
@@ -56,6 +56,15 @@ namespace AwariEngine
 
         public void Sow(string pit)
         {
+            var i = GetIndex(pit);
+            if (i < 0 || i > 11)
+            {
+                throw new ArgumentException($"Invalid pit identifier '{pit}'");
+            }
+            if (_position.SouthToMove ^ i<6)
+            {
+                throw new ArgumentException($"{(_position.SouthToMove ? Player.North : Player.South)} already moved, a player cannot make two moves in a row.");
+            }
             _position.Sow(GetIndex(pit));
         }        
     }

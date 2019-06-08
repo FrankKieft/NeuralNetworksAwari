@@ -1,6 +1,7 @@
 using AwariEngine;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace AwariEngineTests
 {
@@ -29,6 +30,7 @@ namespace AwariEngineTests
         {
             _initialBoard.Sow("B");
             _initialBoard.FirstToMove.Should().Be(Player.North);
+            _initialBoard.Invoking(x => x.Sow("F")).Should().Throw<ArgumentException>().WithMessage("South already moved, a player cannot make two moves in a row.");
         }
 
         [TestMethod]
@@ -59,6 +61,29 @@ namespace AwariEngineTests
             var board = new AwariBoard(3, 0, 3, 3, 15, 3, 3, 3, 3, 3, 3, 3, 1, 2);
             board.Sow("E");
             board.Pits["E"].Should().Be(0);
+        }
+
+        [TestMethod]
+        public void When_the_last_pebble_placed_makes_a_group_of_two_or_three_then_that_pits_stones_are_captured_and_scored_by_placing_in_the_capturing_players_awari()
+        {
+            CaptureTest(stonesInEndPit: 0, expectedStonesLeftInEndPit: 1, expectedStonesInSouthAwari: 0);
+            CaptureTest(stonesInEndPit: 1, expectedStonesLeftInEndPit: 0, expectedStonesInSouthAwari: 2);
+            CaptureTest(stonesInEndPit: 2, expectedStonesLeftInEndPit: 0, expectedStonesInSouthAwari: 3);
+            CaptureTest(stonesInEndPit: 3, expectedStonesLeftInEndPit: 4, expectedStonesInSouthAwari: 0);
+            CaptureTest(stonesInEndPit: 4, expectedStonesLeftInEndPit: 5, expectedStonesInSouthAwari: 0);
+        }
+
+        private void CaptureTest(int stonesInEndPit, int expectedStonesLeftInEndPit, int expectedStonesInSouthAwari)
+        {
+            // Arrange
+            var board = new AwariBoard(8-stonesInEndPit, 4, 4, 4, 4, 4, 4, 4, 4, stonesInEndPit, 4, 4, 0, 0);
+
+            // Act
+            board.Sow("F");
+
+            // Assert
+            board.Pits["d"].Should().Be(expectedStonesLeftInEndPit);
+            board.SouthAwari.Should().Be(expectedStonesInSouthAwari);
         }
     }
 }

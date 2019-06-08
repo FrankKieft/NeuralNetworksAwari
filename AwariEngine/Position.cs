@@ -14,15 +14,16 @@ namespace AwariEngine
             int A, int B, int C, int D, int E, int F, 
             int a, int b, int c, int d, int e, int f, 
             int southAwari, int northAwari, 
-            Player firstToMove = Player.South)
+            bool southToMove = true)
         {
             Position = new[] { A, B, C, D, E, F, a, b, c, d, e, f, southAwari, northAwari };
             History = new List<int[]>();
+            SouthToMove = southToMove;
         }
 
         public int[] Position { get; }
         public List<int[]> History { get; }
-        public Player InitialFirstMove { get; }
+        public bool SouthToMove { get; private set; }
 
         public bool CanSow(int pit)
         {
@@ -46,7 +47,15 @@ namespace AwariEngine
                 stones--;
             }
 
+            while (p>=0 && (SouthToMove ^ p < 6) && Position[p] > 1 && Position[p] < 4)
+            {
+                Position[SouthToMove ? SOUTH_AWARI : NORTH_AWARI] = Position[p];
+                Position[p] = 0;
+                p--;
+            }
+            
             History.Add(previous);
+            SouthToMove = !SouthToMove;
         }
     }
 }
