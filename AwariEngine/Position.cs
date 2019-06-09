@@ -49,7 +49,7 @@ namespace AwariEngine
 
             while (p>=0 && (SouthToMove ^ p < 6) && Position[p] > 1 && Position[p] < 4)
             {
-                Position[SouthToMove ? SOUTH_AWARI : NORTH_AWARI] = Position[p];
+                Position[SouthToMove ? SOUTH_AWARI : NORTH_AWARI] += Position[p];
                 Position[p] = 0;
                 p--;
             }

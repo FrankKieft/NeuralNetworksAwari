@@ -68,8 +68,8 @@ namespace AwariEngine
         private int GetPitIndex(string pit)
         {
             var c = pit.ToCharArray()[0];
-            var i = c <= 'F' ? c - 'A' : c - 'a';
-            if (i<0 || i>5)
+            var i = c <= 'F' ? c - 'A' : c - 'a' + 6;
+            if (i<0 || i>11)
                 throw new ArgumentException($"Invalid pit identifier '{pit}'");
 
             return i;
