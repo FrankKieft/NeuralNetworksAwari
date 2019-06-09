@@ -48,8 +48,12 @@ namespace AwariEngineTests
         [TestMethod]
         public void R11_a_pit_may_be_sown_if_it_contains_one_or_more_stones()
         {
-            var board = new AwariBoard(3, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6, 9);
-
+            var board = new AwariBoard(
+                f: 3, e: 3, d: 3, c: 3, b: 3, a: 3,
+                A: 3, B: 0, C: 3, D: 3, E: 3, F: 3,
+                southAwari: 6,
+                northAwari: 9);
+            
             board.CanSow("A").Should().BeTrue();
             board.CanSow("B").Should().BeFalse();
             board.CanSow("C").Should().BeTrue();
@@ -73,7 +77,11 @@ namespace AwariEngineTests
         [TestMethod]
         public void R13_the_original_pit_is_skipped_whenever_it_is_encountered()
         {
-            var board = new AwariBoard(3, 0, 3, 3, 15, 3, 3, 3, 3, 3, 3, 3, 1, 2);
+            var board = new AwariBoard(
+                f: 3, e: 3, d: 3, c: 3, b: 3, a: 3,
+                A: 3, B: 0, C: 3, D: 3, E: 15, F: 3,
+                southAwari: 1,
+                northAwari: 2);
             board.Sow("E");
             board.Pits["E"].Should().Be(0);
         }
@@ -92,8 +100,8 @@ namespace AwariEngineTests
         public void R15_if_the_previous_pit_then_contains_a_group_of_two_or_three_stones_these_stones_are_also_captured_and_so_forth()
         {
             var board = new AwariBoard(
+                f: 4, e: 4, d: 4, c: 1, b: 2, a: 1,
                 A: 11, B: 4, C: 6, D: 4, E: 4, F: 3,
-                a: 1, b: 2, c: 1, d: 4, e: 4, f: 4,
                 southAwari: 0,
                 northAwari: 0);
 
@@ -110,8 +118,8 @@ namespace AwariEngineTests
         {
             // Arrange
             var board = new AwariBoard(
+                f: 4, e: 4, d: 4, c: 1, b: 2, a: 1,
                 A: 13, B: 4, C: 6, D: 4, E: 4, F: 1,
-                a: 1, b: 2, c: 1, d: 4, e: 4, f: 4,
                 southAwari: 0,
                 northAwari: 0);
 
@@ -135,8 +143,8 @@ namespace AwariEngineTests
         public void R17_Stones_may_not_be_sown_for_a_grand_slam_unless_no_other_move_is_possible()
         {
             var board = new AwariBoard(
+                f: 0, e: 0, d: 2, c: 1, b: 2, a: 1,
                 A: 2, B: 0, C: 0, D: 0, E: 0, F: 4,
-                a: 1, b: 2, c: 1, d: 2, e: 0, f: 0,
                 southAwari: 18,
                 northAwari: 18);
 
@@ -144,8 +152,8 @@ namespace AwariEngineTests
             board.CanSow("F").Should().BeFalse();
 
             board = new AwariBoard(
+                f: 0, e: 0, d: 2, c: 1, b: 2, a: 1,
                 A: 0, B: 0, C: 0, D: 0, E: 0, F: 4,
-                a: 1, b: 2, c: 1, d: 2, e: 0, f: 0,
                 southAwari: 20,
                 northAwari: 18);
 
@@ -156,8 +164,8 @@ namespace AwariEngineTests
         public void R18_a_game_will_be_ended_by_a_player_being_unable_to_move_in_which_case_the_remaining_stones_on_the_board_belong_to_the_opponent()
         {
             var board = new AwariBoard(
+                f: 0, e: 0, d: 0, c: 0, b: 0, a: 0,
                 A: 2, B: 1, C: 1, D: 0, E: 0, F: 0,
-                a: 0, b: 0, c: 0, d: 0, e: 0, f: 0,
                 southAwari: 21,
                 northAwari: 23);
             board.Sow("A");
@@ -172,20 +180,39 @@ namespace AwariEngineTests
         public void R19_a_player_must_leave_the_opponent_with_a_legal_move_at_the_start_of_their_turn_if_it_is_possible_to_do_so()
         {
             var board = new AwariBoard(
+                f: 0, e: 0, d: 0, c: 0, b: 0, a: 0,
                 A: 0, B: 4, C: 0, D: 0, E: 0, F: 1,
-                a: 0, b: 0, c: 0, d: 0, e: 0, f: 0,
                 southAwari: 21,
                 northAwari: 22);
             board.CanSow("B").Should().BeFalse();
             board.CanSow("F").Should().BeTrue();
         }
 
+        [TestMethod]
+        public void R20_a_game_will_also_be_ended_by_repetition_each_player_captures_the_stones_on_their_side_of_the_board()
+        {
+            var board = new AwariBoard(
+                f: 1, e: 0, d: 0, c: 0, b: 0, a: 0,
+                A: 0, B: 0, C: 0, D: 0, E: 0, F: 1,
+                southAwari: 22,
+                northAwari: 24);
+
+            board.Sow("F").Sow("f").Sow("A").Sow("a").Sow("B").Sow("b").Sow("C").Sow("c").Sow("D").Sow("d").Sow("E");
+            board.GameHasEnded.Should().BeFalse();
+            board.SouthAwari.Should().Be(22);
+            board.NorthAwari.Should().Be(24);
+
+            board.Sow("e");
+            board.GameHasEnded.Should().BeTrue();
+            board.SouthAwari.Should().Be(23);
+            board.NorthAwari.Should().Be(25);
+        }
 
         private void CaptureTest(int stonesInEndPit, int expectedStonesLeftInEndPit, int expectedStonesInSouthAwari)
         {
             var board = new AwariBoard(
-                A: 4, B: 4, C: 4, D: 4, E: 4, F: 4,
                 a: 0, b: 4, c: 4, d: stonesInEndPit, e: 4, f: 4,
+                A: 4, B: 4, C: 4, D: 4, E: 4, F: 4,
                 southAwari: 0,
                 northAwari: 8 - stonesInEndPit);
 

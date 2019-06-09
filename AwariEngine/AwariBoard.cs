@@ -13,9 +13,9 @@ namespace AwariEngine
             return new AwariBoard(4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0);
         }
 
-        public AwariBoard(
-            int A, int B, int C, int D, int E, int F, 
-            int a, int b, int c, int d, int e, int f, 
+        public AwariBoard( 
+            int f, int e, int d, int c, int b, int a, 
+            int A, int B, int C, int D, int E, int F,
             int southAwari, int northAwari, 
             Player firstToMove = Player.South)
         {
@@ -61,7 +61,7 @@ namespace AwariEngine
             return PitIsOnSideToMove(pit) && _position.CanSow().Contains(GetPitIndex(pit));
         }
 
-        public void Sow(string pit)
+        public AwariBoard Sow(string pit)
         {            
             if (!PitIsOnSideToMove(pit))
             {
@@ -75,6 +75,7 @@ namespace AwariEngine
                 _position.Sow(GetPitIndex(pit));
                 FirstToMove = FirstToMove == Player.South ? Player.North : Player.South;
             }
+            return this;
         }        
 
         private int GetPitIndex(string pit)
