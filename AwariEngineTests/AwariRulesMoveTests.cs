@@ -168,6 +168,19 @@ namespace AwariEngineTests
             board.SouthAwari.Should().Be(25);
         }
 
+        [TestMethod]
+        public void R19_a_player_must_leave_the_opponent_with_a_legal_move_at_the_start_of_their_turn_if_it_is_possible_to_do_so()
+        {
+            var board = new AwariBoard(
+                A: 0, B: 4, C: 0, D: 0, E: 0, F: 1,
+                a: 0, b: 0, c: 0, d: 0, e: 0, f: 0,
+                southAwari: 21,
+                northAwari: 22);
+            board.CanSow("B").Should().BeFalse();
+            board.CanSow("F").Should().BeTrue();
+        }
+
+
         private void CaptureTest(int stonesInEndPit, int expectedStonesLeftInEndPit, int expectedStonesInSouthAwari)
         {
             var board = new AwariBoard(
