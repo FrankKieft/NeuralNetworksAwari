@@ -38,7 +38,7 @@ namespace AwariEngine
                 if (Position[i] > 0)
                 {
                     Sow(i);
-                    if (Position[6] + Position[7] + Position[8] + Position[9] + Position[11] + Position[11] == 0)
+                    if (Position[0] + Position[1] + Position[2] + Position[3] + Position[4] + Position[5] == 0)
                     {
                         noMoveLeftPits.Add(i);
                     }
@@ -63,7 +63,6 @@ namespace AwariEngine
             int[] previous = new int[14];
 
             Position.CopyTo(previous, 0);
-            Position = FlipPosition(Position);
             
             var stones = Position[pit];
             Position[pit] = 0;
@@ -77,13 +76,14 @@ namespace AwariEngine
                 stones--;
             }
 
-            while (p>5)
+            while (p > 5 && Position[p] > 1 && Position[p] < 4)
             {
                 Position[SOUTH_AWARI] += Position[p];
                 Position[p] = 0;
                 p--;
             }
-            
+
+            Position = FlipPosition(Position);
             History.Add(previous);
         }
     }

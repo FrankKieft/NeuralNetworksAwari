@@ -137,8 +137,8 @@ namespace AwariEngineTests
             var board = new AwariBoard(
                 A: 2, B: 0, C: 0, D: 0, E: 0, F: 4,
                 a: 1, b: 2, c: 1, d: 2, e: 0, f: 0,
-                southAwari: 16,
-                northAwari: 16);
+                southAwari: 18,
+                northAwari: 18);
 
             board.CanSow("A").Should().BeTrue();
             board.CanSow("F").Should().BeFalse();
@@ -146,8 +146,8 @@ namespace AwariEngineTests
             board = new AwariBoard(
                 A: 0, B: 0, C: 0, D: 0, E: 0, F: 4,
                 a: 1, b: 2, c: 1, d: 2, e: 0, f: 0,
-                southAwari: 17,
-                northAwari: 17);
+                southAwari: 20,
+                northAwari: 18);
 
             board.CanSow("F").Should().BeTrue();
         }

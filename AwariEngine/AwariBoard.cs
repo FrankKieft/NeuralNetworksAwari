@@ -52,7 +52,7 @@ namespace AwariEngine
             get
             {
                 var position = FirstToMove == Player.South ? _position.Position : AwariPosition.FlipPosition(_position.Position);
-                return Enumerable.Range(0, 12).ToDictionary(x => ((char)(x < 6 ? 'A' + x : 'a' - 6 + x)).ToString(), x => _position.Position[x]);
+                return Enumerable.Range(0, 12).ToDictionary(x => ((char)(x < 6 ? 'A' + x : 'a' + x - 6)).ToString(), x => position[x]);
             }
         }
 
