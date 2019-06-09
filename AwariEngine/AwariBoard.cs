@@ -7,9 +7,7 @@ namespace AwariEngine
     public class AwariBoard
     {
         private AwariPosition _position;
-        private static readonly string[] _pits = new[] { "A", "B", "C", "D", "E", "F", "a", "b", "c", "d", "e", "f" };
-        private Func<string, int> GetIndex = pit => Array.IndexOf(_pits, pit);
-
+        
         public static AwariBoard GetInitialBoard()
         {
             return new AwariBoard(4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0);
@@ -21,12 +19,15 @@ namespace AwariEngine
             int southAwari, int northAwari, 
             Player firstToMove = Player.South)
         {
-            _position = new AwariPosition( A, B, C, D, E, F, a, b, c, d, e, f, southAwari, northAwari, firstToMove==Player.South );
+            _position = new AwariPosition( 
+                A, B, C, D, E, F, 
+                a, b, c, d, e, f, 
+                southAwari, 
+                northAwari, 
+                firstToMove==Player.South );
 
             if (TotalStones != 48)
-            {
                 throw new ArgumentException($"AwariBoard should always contain 48 stones while {TotalStones} stones are passed.");
-            }
         }
 
         public int NorthAwari { get { return _position.Position[AwariPosition.NORTH_AWARI]; } }
@@ -43,29 +44,40 @@ namespace AwariEngine
         {
             get
             {
-                return Enumerable.Range(0, 12).ToDictionary(x => _pits[x], x => _position.Position[x]);
+                return Enumerable.Range(0, 12).ToDictionary(x => ((char)(x < 6 ? 'A' + x : 'a' - 6 + x)).ToString(), x => _position.Position[x]);
             }
         }
 
         public bool CanSow(string pit)
         {
-            var i = GetIndex(pit);
-
-            return _position.CanSow(GetIndex(pit));
+            return PitIsOnSideToMove(pit) && _position.CanSow(GetPitIndex(pit));
         }
 
         public void Sow(string pit)
         {
-            var i = GetIndex(pit);
-            if (i < 0 || i > 11)
+            if (!PitIsOnSideToMove(pit))
             {
-                throw new ArgumentException($"Invalid pit identifier '{pit}'");
+                if (_position.History.Count > 0)
+                    throw new ArgumentException($"{(_position.SouthToMove ? Player.North : Player.South)} already moved, a player cannot make two moves in a row.");
+                else
+                    throw new ArgumentException($"Only south can make the first move (A-F).");
             }
-            if (_position.SouthToMove ^ i<6)
-            {
-                throw new ArgumentException($"{(_position.SouthToMove ? Player.North : Player.South)} already moved, a player cannot make two moves in a row.");
-            }
-            _position.Sow(GetIndex(pit));
+            _position.Sow(GetPitIndex(pit));
         }        
+
+        private int GetPitIndex(string pit)
+        {
+            var c = pit.ToCharArray()[0];
+            var i = c <= 'F' ? c - 'A' : c - 'a';
+            if (i<0 || i>5)
+                throw new ArgumentException($"Invalid pit identifier '{pit}'");
+
+            return i;
+        }
+
+        private bool PitIsOnSideToMove(string pit)
+        {
+            return _position.SouthToMove ^ pit.ToCharArray()[0] > 'F';
+        }
     }
 }

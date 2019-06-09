@@ -23,6 +23,7 @@ namespace AwariEngineTests
         public void The_south_player_moves_first()
         {
             _initialBoard.FirstToMove.Should().Be(Player.South);
+            _initialBoard.Invoking(x => x.Sow("c")).Should().Throw<ArgumentException>().WithMessage("Only south can make the first move (A-F).");
         }
 
         [TestMethod]
@@ -31,6 +32,17 @@ namespace AwariEngineTests
             _initialBoard.Sow("B");
             _initialBoard.FirstToMove.Should().Be(Player.North);
             _initialBoard.Invoking(x => x.Sow("F")).Should().Throw<ArgumentException>().WithMessage("South already moved, a player cannot make two moves in a row.");
+        }
+
+        [TestMethod]
+        public void The_players_alternate_in_sowing_the_stones_in_a_pit_of_their_choice_on_their_side_of_the_board_North_owns_pits_a_f_and_south_pits_A_F()
+        {
+            _initialBoard.CanSow("B").Should().BeTrue();
+            _initialBoard.CanSow("b").Should().BeFalse();
+            _initialBoard.Sow("C");
+            _initialBoard.CanSow("B").Should().BeFalse();
+            _initialBoard.CanSow("b").Should().BeTrue();
+            _initialBoard.Invoking(x => x.Sow("B")).Should().Throw<ArgumentException>().WithMessage("South already moved, a player cannot make two moves in a row.");
         }
 
         [TestMethod]
