@@ -20,7 +20,7 @@ namespace AwariEngineTests
         }
 
         [TestMethod]
-        public void R07_the_players_alternate_moves()
+        public void R08_the_players_alternate_moves()
         {
             _initialBoard.Sow("B");
             _initialBoard.FirstToMove.Should().Be(Player.North);
@@ -28,14 +28,14 @@ namespace AwariEngineTests
         }
 
         [TestMethod]
-        public void R09_the_south_player_moves_first()
+        public void R10_the_south_player_moves_first()
         {
             _initialBoard.FirstToMove.Should().Be(Player.South);
             _initialBoard.Invoking(x => x.Sow("c")).Should().Throw<ArgumentException>().WithMessage("Only south can make the first move (A-F).");
         }
 
         [TestMethod]
-        public void R10_the_players_alternate_in_sowing_the_stones_in_a_pit_of_their_choice_on_their_side_of_the_board_North_owns_pits_a_f_and_south_pits_A_F()
+        public void R11_the_players_alternate_in_sowing_the_stones_in_a_pit_of_their_choice_on_their_side_of_the_board_North_owns_pits_a_f_and_south_pits_A_F()
         {
             _initialBoard.CanSow("B").Should().BeTrue();
             _initialBoard.CanSow("b").Should().BeFalse();
@@ -46,7 +46,7 @@ namespace AwariEngineTests
         }
 
         [TestMethod]
-        public void R11_a_pit_may_be_sown_if_it_contains_one_or_more_stones()
+        public void R12_a_pit_may_be_sown_if_it_contains_one_or_more_stones()
         {
             var board = new AwariBoard(
                 f: 3, e: 3, d: 3, c: 3, b: 3, a: 3,
@@ -60,7 +60,7 @@ namespace AwariEngineTests
         }
 
         [TestMethod]
-        public void R12_the_stones_are_removed_from_the_pit_and_placed_one_at_a_time_into_subsequent_pits_moving_around_the_board_counterclockwise_()
+        public void R13_the_stones_are_removed_from_the_pit_and_placed_one_at_a_time_into_subsequent_pits_moving_around_the_board_counterclockwise_()
         {
             _initialBoard.Sow("D");
             _initialBoard.Pits["D"].Should().Be(0);
@@ -75,7 +75,7 @@ namespace AwariEngineTests
         }
 
         [TestMethod]
-        public void R13_the_original_pit_is_skipped_whenever_it_is_encountered()
+        public void R14_the_original_pit_is_skipped_whenever_it_is_encountered()
         {
             var board = new AwariBoard(
                 f: 3, e: 3, d: 3, c: 3, b: 3, a: 3,
@@ -87,7 +87,7 @@ namespace AwariEngineTests
         }
 
         [TestMethod]
-        public void R14_when_the_last_pebble_placed_makes_a_group_of_two_or_three_then_that_pits_stones_are_captured_and_scored_by_placing_in_the_capturing_players_awari()
+        public void R15_when_the_last_pebble_placed_makes_a_group_of_two_or_three_then_that_pits_stones_are_captured_and_scored_by_placing_in_the_capturing_players_awari()
         {
             CaptureTest(stonesInEndPit: 0, expectedStonesLeftInEndPit: 1, expectedStonesInSouthAwari: 0);
             CaptureTest(stonesInEndPit: 1, expectedStonesLeftInEndPit: 0, expectedStonesInSouthAwari: 2);
@@ -97,7 +97,7 @@ namespace AwariEngineTests
         }
 
         [TestMethod]
-        public void R15_if_the_previous_pit_then_contains_a_group_of_two_or_three_stones_these_stones_are_also_captured_and_so_forth()
+        public void R16_if_the_previous_pit_then_contains_a_group_of_two_or_three_stones_these_stones_are_also_captured_and_so_forth()
         {
             var board = new AwariBoard(
                 f: 4, e: 4, d: 4, c: 1, b: 2, a: 1,
@@ -114,7 +114,7 @@ namespace AwariEngineTests
         }
 
         [TestMethod]
-        public void R16_the_set_of_pits_which_are_captured_is_on_the_opponents_side_of_the_board_reachable_by_captures_from_the_last_pit_sown()
+        public void R17_the_set_of_pits_which_are_captured_is_on_the_opponents_side_of_the_board_reachable_by_captures_from_the_last_pit_sown()
         {
             // Arrange
             var board = new AwariBoard(
@@ -140,7 +140,7 @@ namespace AwariEngineTests
         /// capturing all stones remaining on the board.
         /// </summary>
         [TestMethod]
-        public void R17_Stones_may_not_be_sown_for_a_grand_slam_unless_no_other_move_is_possible()
+        public void R18_Stones_may_not_be_sown_for_a_grand_slam_unless_no_other_move_is_possible()
         {
             var board = new AwariBoard(
                 f: 0, e: 0, d: 2, c: 1, b: 2, a: 1,
@@ -161,7 +161,7 @@ namespace AwariEngineTests
         }
 
         [TestMethod]
-        public void R18_a_game_will_be_ended_by_a_player_being_unable_to_move_in_which_case_the_remaining_stones_on_the_board_belong_to_the_opponent()
+        public void R19_a_game_will_be_ended_by_a_player_being_unable_to_move_in_which_case_the_remaining_stones_on_the_board_belong_to_the_opponent()
         {
             var board = new AwariBoard(
                 A: 2, B: 1, C: 1,
@@ -176,7 +176,7 @@ namespace AwariEngineTests
         }
 
         [TestMethod]
-        public void R19_a_player_must_leave_the_opponent_with_a_legal_move_at_the_start_of_their_turn_if_it_is_possible_to_do_so()
+        public void R20_a_player_must_leave_the_opponent_with_a_legal_move_at_the_start_of_their_turn_if_it_is_possible_to_do_so()
         {
             var board = new AwariBoard(
                 B: 4, F: 1,
@@ -187,7 +187,7 @@ namespace AwariEngineTests
         }
 
         [TestMethod]
-        public void R20_a_game_will_also_be_ended_by_repetition_each_player_captures_the_stones_on_their_side_of_the_board()
+        public void R21_a_game_will_also_be_ended_by_repetition_each_player_captures_the_stones_on_their_side_of_the_board()
         {
             var board = new AwariBoard(
                 f: 1,

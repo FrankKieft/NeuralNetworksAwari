@@ -69,7 +69,7 @@ namespace AwariEngineTests
         }
 
         [TestMethod]
-        public void R06_stones_are_never_lost_from_the_game_all_48_stones_must_always_be_somewhere()
+        public void R07_stones_are_never_lost_from_the_game_all_48_stones_must_always_be_somewhere()
         {
             Action validPosition = () => new AwariBoard(3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6, 6);
             Action invalidPosition = () => new AwariBoard(10, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6, 6);
@@ -79,7 +79,7 @@ namespace AwariEngineTests
         }
 
         [TestMethod]
-        public void R08_each_pit_initially_contains_4_stones()
+        public void R09_each_pit_initially_contains_4_stones()
         {
             _initialBoard.Pits.Any(x => x.Value != 4).Should().BeFalse();
         }
