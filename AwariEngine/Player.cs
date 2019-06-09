@@ -1,4 +1,4 @@
-﻿namespace AwariEngine
+﻿namespace NeuralNetworksAwari.AwariEngine
 {
     public enum Player
     {

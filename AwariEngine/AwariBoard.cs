@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AwariEngine
+namespace NeuralNetworksAwari.AwariEngine
 {
     public class AwariBoard
     {

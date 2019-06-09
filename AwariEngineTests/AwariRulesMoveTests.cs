@@ -1,9 +1,9 @@
-using AwariEngine;
+using NeuralNetworksAwari.AwariEngine;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace AwariEngineTests
+namespace NeuralNetworksAwari.AwariEngineTests
 {
     /// <summary>
     /// All rules based on http://web.cecs.pdx.edu/~bart/cs510games-summer2000/hw4/bart-awari-rules.html

@@ -4,6 +4,10 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <AssemblyName>NeuralNetworksAwari.AwariEngineTests</AssemblyName>
+
+    <RootNamespace>NeuralNetworksAwari.AwariEngineTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
