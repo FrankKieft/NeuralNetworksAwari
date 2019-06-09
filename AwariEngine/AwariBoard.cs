@@ -10,13 +10,13 @@ namespace AwariEngine
         
         public static AwariBoard GetInitialBoard()
         {
-            return new AwariBoard(4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0);
+            return new AwariBoard(4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4);
         }
 
         public AwariBoard( 
-            int f, int e, int d, int c, int b, int a, 
-            int A, int B, int C, int D, int E, int F,
-            int southAwari, int northAwari, 
+            int f=0, int e=0, int d=0, int c=0, int b=0, int a=0, 
+            int A=0, int B=0, int C=0, int D=0, int E=0, int F=0,
+            int southAwari=0, int northAwari=0, 
             Player firstToMove = Player.South)
         {
             FirstToMove = firstToMove;

@@ -152,8 +152,8 @@ namespace AwariEngineTests
             board.CanSow("F").Should().BeFalse();
 
             board = new AwariBoard(
-                f: 0, e: 0, d: 2, c: 1, b: 2, a: 1,
-                A: 0, B: 0, C: 0, D: 0, E: 0, F: 4,
+                d: 2, c: 1, b: 2, a: 1,
+                F: 4,
                 southAwari: 20,
                 northAwari: 18);
 
@@ -164,8 +164,7 @@ namespace AwariEngineTests
         public void R18_a_game_will_be_ended_by_a_player_being_unable_to_move_in_which_case_the_remaining_stones_on_the_board_belong_to_the_opponent()
         {
             var board = new AwariBoard(
-                f: 0, e: 0, d: 0, c: 0, b: 0, a: 0,
-                A: 2, B: 1, C: 1, D: 0, E: 0, F: 0,
+                A: 2, B: 1, C: 1,
                 southAwari: 21,
                 northAwari: 23);
             board.Sow("A");
@@ -180,8 +179,7 @@ namespace AwariEngineTests
         public void R19_a_player_must_leave_the_opponent_with_a_legal_move_at_the_start_of_their_turn_if_it_is_possible_to_do_so()
         {
             var board = new AwariBoard(
-                f: 0, e: 0, d: 0, c: 0, b: 0, a: 0,
-                A: 0, B: 4, C: 0, D: 0, E: 0, F: 1,
+                B: 4, F: 1,
                 southAwari: 21,
                 northAwari: 22);
             board.CanSow("B").Should().BeFalse();
@@ -192,8 +190,8 @@ namespace AwariEngineTests
         public void R20_a_game_will_also_be_ended_by_repetition_each_player_captures_the_stones_on_their_side_of_the_board()
         {
             var board = new AwariBoard(
-                f: 1, e: 0, d: 0, c: 0, b: 0, a: 0,
-                A: 0, B: 0, C: 0, D: 0, E: 0, F: 1,
+                f: 1,
+                F: 1,
                 southAwari: 22,
                 northAwari: 24);
 
