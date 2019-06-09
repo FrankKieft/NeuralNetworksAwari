@@ -51,7 +51,7 @@ namespace AwariEngine
             }
             return pits.Count == 0 ? noMoveLeftPits : pits;
         }
-
+        
         private void MoveBack()
         {
             Position = History.Last();
@@ -84,6 +84,14 @@ namespace AwariEngine
             }
 
             Position = FlipPosition(Position);
+            if (Position[0] + Position[1] + Position[2] + Position[3] + Position[4] + Position[5] == 0)
+            {
+                for(var i=6; i<12; i++)
+                {
+                    Position[i] = 0;
+                }
+                Position[NORTH_AWARI] = 48 - Position[SOUTH_AWARI];
+            }
             History.Add(previous);
         }
     }

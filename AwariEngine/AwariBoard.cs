@@ -45,7 +45,7 @@ namespace AwariEngine
         public int NorthAwari { get { return _position.Position[FirstToMove == Player.South ? AwariPosition.NORTH_AWARI: AwariPosition.SOUTH_AWARI]; } }
         public int SouthAwari { get { return _position.Position[FirstToMove == Player.South ? AwariPosition.SOUTH_AWARI : AwariPosition.NORTH_AWARI]; } }
         public int TotalStones { get { return _position.Position.Sum(); } }
-        public bool GameEnded { get { return SouthAwari + NorthAwari == 48; } }
+        public bool GameHasEnded { get { return SouthAwari + NorthAwari == 48; } }
 
         public Dictionary<string, int> Pits
         {

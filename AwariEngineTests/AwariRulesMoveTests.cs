@@ -152,6 +152,22 @@ namespace AwariEngineTests
             board.CanSow("F").Should().BeTrue();
         }
 
+        [TestMethod]
+        public void R18_a_game_will_be_ended_by_a_player_being_unable_to_move_in_which_case_the_remaining_stones_on_the_board_belong_to_the_opponent()
+        {
+            var board = new AwariBoard(
+                A: 2, B: 1, C: 1, D: 0, E: 0, F: 0,
+                a: 0, b: 0, c: 0, d: 0, e: 0, f: 0,
+                southAwari: 21,
+                northAwari: 23);
+            board.Sow("A");
+            board.Pits["A"].Should().Be(0);
+            board.Pits["B"].Should().Be(0);
+            board.Pits["C"].Should().Be(0);
+            board.GameHasEnded.Should().BeTrue();
+            board.SouthAwari.Should().Be(25);
+        }
+
         private void CaptureTest(int stonesInEndPit, int expectedStonesLeftInEndPit, int expectedStonesInSouthAwari)
         {
             var board = new AwariBoard(
