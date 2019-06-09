@@ -91,17 +91,14 @@ namespace AwariEngineTests
         [TestMethod]
         public void R15_if_the_previous_pit_then_contains_a_group_of_two_or_three_stones_these_stones_are_also_captured_and_so_forth()
         {
-            // Arrange
             var board = new AwariBoard(
                 A: 11, B: 4, C: 6, D: 4, E: 4, F: 3,
                 a: 1, b: 2, c: 1, d: 4, e: 4, f: 4,
                 southAwari: 0,
                 northAwari: 0);
 
-            // Act
             board.Sow("C");
 
-            // Assert
             board.Pits["a"].Should().Be(0);
             board.Pits["b"].Should().Be(0);
             board.Pits["c"].Should().Be(0);
@@ -129,19 +126,42 @@ namespace AwariEngineTests
             board.SouthAwari.Should().Be(7);
         }
 
+        /// <summary>
+        /// The sowing of stones to capture all stones on the opponent's side of the board is known as a grand slam, 
+        /// clean sweep, or grand coup. Normally, a grand slam ends the game, 
+        /// capturing all stones remaining on the board.
+        /// </summary>
+        [TestMethod]
+        public void R17_Stones_may_not_be_sown_for_a_grand_slam_unless_no_other_move_is_possible()
+        {
+            var board = new AwariBoard(
+                A: 2, B: 0, C: 0, D: 0, E: 0, F: 4,
+                a: 1, b: 2, c: 1, d: 2, e: 0, f: 0,
+                southAwari: 16,
+                northAwari: 16);
+
+            board.CanSow("A").Should().BeTrue();
+            board.CanSow("F").Should().BeFalse();
+
+            board = new AwariBoard(
+                A: 0, B: 0, C: 0, D: 0, E: 0, F: 4,
+                a: 1, b: 2, c: 1, d: 2, e: 0, f: 0,
+                southAwari: 17,
+                northAwari: 17);
+
+            board.CanSow("F").Should().BeTrue();
+        }
+
         private void CaptureTest(int stonesInEndPit, int expectedStonesLeftInEndPit, int expectedStonesInSouthAwari)
         {
-            // Arrange
             var board = new AwariBoard(
                 A: 4, B: 4, C: 4, D: 4, E: 4, F: 4,
                 a: 0, b: 4, c: 4, d: stonesInEndPit, e: 4, f: 4,
                 southAwari: 0,
                 northAwari: 8 - stonesInEndPit);
 
-            // Act
             board.Sow("F");
 
-            // Assert
             board.Pits["d"].Should().Be(expectedStonesLeftInEndPit);
             board.SouthAwari.Should().Be(expectedStonesInSouthAwari);
         }

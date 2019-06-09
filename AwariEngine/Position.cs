@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AwariEngine
 {
@@ -7,34 +8,63 @@ namespace AwariEngine
     {
         public const int SOUTH_AWARI = 12;
         public const int NORTH_AWARI = 13;
-        private static readonly string[] _pits = new[] { "A", "B", "C", "D", "E", "F", "a", "b", "c", "d", "e", "f" };
         private Func<int, int> NextPit = (x) => x += x < 11 ? 1 : -11;
-        
-        public AwariPosition(
-            int A, int B, int C, int D, int E, int F, 
-            int a, int b, int c, int d, int e, int f, 
-            int southAwari, int northAwari, 
-            bool southToMove = true)
+
+        public AwariPosition(int[] position)
         {
-            Position = new[] { A, B, C, D, E, F, a, b, c, d, e, f, southAwari, northAwari };
+            Position = position;
             History = new List<int[]>();
-            SouthToMove = southToMove;
         }
 
-        public int[] Position { get; }
+        public int[] Position { get; private set; }
         public List<int[]> History { get; }
-        public bool SouthToMove { get; private set; }
 
-        public bool CanSow(int pit)
+        public static int[] FlipPosition(int[] position)
         {
-            return Position[pit] > 0;
+            int[] newPosition = new int[14];
+            Array.Copy(position, 6, newPosition, 0, 6);
+            Array.Copy(position, 0, newPosition, 6, 6);
+            newPosition[NORTH_AWARI] = position[SOUTH_AWARI];
+            newPosition[SOUTH_AWARI] = position[NORTH_AWARI];
+            return newPosition;
+        }
+
+        public List<int> CanSow()
+        {
+            var pits = new List<int>();
+            var noMoveLeftPits = new List<int>();
+            for (var i = 0; i < 6; i++)
+            {
+                if (Position[i] > 0)
+                {
+                    Sow(i);
+                    if (Position[6] + Position[7] + Position[8] + Position[9] + Position[11] + Position[11] == 0)
+                    {
+                        noMoveLeftPits.Add(i);
+                    }
+                    else
+                    {
+                        pits.Add(i);
+                    }
+                    MoveBack();
+                }
+            }
+            return pits.Count == 0 ? noMoveLeftPits : pits;
+        }
+
+        private void MoveBack()
+        {
+            Position = History.Last();
+            History.Remove(Position);
         }
 
         public void Sow(int pit)
         {
             int[] previous = new int[14];
-            Position.CopyTo(previous, 0);
 
+            Position.CopyTo(previous, 0);
+            Position = FlipPosition(Position);
+            
             var stones = Position[pit];
             Position[pit] = 0;
 
@@ -47,15 +77,14 @@ namespace AwariEngine
                 stones--;
             }
 
-            while (p>=0 && (SouthToMove ^ p < 6) && Position[p] > 1 && Position[p] < 4)
+            while (p>5)
             {
-                Position[SouthToMove ? SOUTH_AWARI : NORTH_AWARI] += Position[p];
+                Position[SOUTH_AWARI] += Position[p];
                 Position[p] = 0;
                 p--;
             }
             
             History.Add(previous);
-            SouthToMove = !SouthToMove;
         }
     }
 }
