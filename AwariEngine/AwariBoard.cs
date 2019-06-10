@@ -7,7 +7,8 @@ namespace NeuralNetworksAwari.AwariEngine
     public class AwariBoard
     {
         private AwariPosition _position;
-        
+        private AwariEvaluator _evaluator;
+
         public static AwariBoard GetInitialBoard()
         {
             return new AwariBoard(4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4);
@@ -19,6 +20,7 @@ namespace NeuralNetworksAwari.AwariEngine
             int southAwari=0, int northAwari=0, 
             Player firstToMove = Player.South)
         {
+            _evaluator = new AwariEvaluator();
             FirstToMove = firstToMove;
             if (firstToMove == Player.South)
             {
@@ -39,6 +41,11 @@ namespace NeuralNetworksAwari.AwariEngine
 
             if (TotalStones != 48)
                 throw new ArgumentException($"AwariBoard should always contain 48 stones while {TotalStones} stones are passed.");
+        }
+
+        public int Evaluate(int depth)
+        {
+            return _evaluator.Evaluate(_position, depth);
         }
 
         public Player FirstToMove { get; private set; }

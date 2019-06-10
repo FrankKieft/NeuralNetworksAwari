@@ -55,7 +55,7 @@ namespace NeuralNetworksAwari.AwariEngine
             return pits.Count == 0 ? noMoveLeftPits : pits;
         }
 
-        private void MoveBack()
+        public void MoveBack()
         {
             Position = History.Last();
             _lastCapture.Pop();
