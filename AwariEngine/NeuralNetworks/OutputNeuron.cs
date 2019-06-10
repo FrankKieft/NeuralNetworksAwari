@@ -1,8 +1,8 @@
-﻿using NeuralNetworksAwari.AwariEngine.NeuralNetwork.Interfaces;
+﻿using NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces;
 using System;
 using System.Collections.Generic;
 
-namespace NeuralNetworksAwari.AwariEngine.NeuralNetwork
+namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
 {
     public class OutputNeuron : IOutputNeuron
     {

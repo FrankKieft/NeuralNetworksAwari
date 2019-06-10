@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NeuralNetworksAwari.AwariEngine.NeuralNetwork;
-using NeuralNetworksAwari.AwariEngine.NeuralNetwork.Interfaces;
+using NeuralNetworksAwari.AwariEngine.NeuralNetworks;
+using NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces;
 using NSubstitute;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Linq;
 namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
 {
     [TestClass]
-    public class InputNeuronTests
+    public class NeuronTests
     {
         private IRandomizer _random;
 
