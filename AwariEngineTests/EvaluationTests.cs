@@ -21,7 +21,7 @@ namespace NeuralNetworksAwari.AwariEngineTests
         }
 
         [TestMethod]
-        public void I_can_get_the_best_score_for_2_stone_after_6_moves()
+        public void I_can_get_the_best_score_for_2_stones_after_6_moves()
         {
             var board = new AwariBoard(
                 F: 1, 
@@ -33,7 +33,7 @@ namespace NeuralNetworksAwari.AwariEngineTests
         }
 
         [TestMethod]
-        public void I_can_get_the_best_score_for_6_stone_after_5_moves()
+        public void I_can_get_the_best_score_for_6_stones_after_5_moves()
         {
             var board = new AwariBoard(
                 A: 1, E: 1, F: 2,
@@ -49,7 +49,7 @@ namespace NeuralNetworksAwari.AwariEngineTests
         /// North can immediatly capture 2 back.
         /// </summary>
         [TestMethod]
-        public void I_can_get_the_best_score_for_14_stone_after_4_moves()
+        public void I_can_get_the_best_score_for_14_stones_after_4_moves()
         {
             var board = new AwariBoard(
                 D: 1, E: 1, F: 11,
