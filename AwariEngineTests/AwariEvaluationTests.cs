@@ -14,16 +14,9 @@ namespace NeuralNetworksAwari.AwariEngineTests
                 F: 2,
                 a: 1,
                 b: 2,
-                southAwari: 19,
-                northAwari: 24);
-            board.Evaluate(1).Should().Be(0);
-
-            board = new AwariBoard(
-                F: 2,
-                a: 1,
-                b: 2,
                 southAwari: 24,
                 northAwari: 19);
+
             board.Evaluate(1).Should().Be(10);
         }
 
@@ -68,7 +61,33 @@ namespace NeuralNetworksAwari.AwariEngineTests
         }
 
         [TestMethod]
-        public void I_can_get_the_best_score_for_the_initial_board()
+        public void Illegal_move_is_recognized_by_the_evaluator_and_not_played()
+        {
+            // F cannot be played, no gain for South
+            var board = new AwariBoard(
+                D: 2, F: 4,
+                a: 2, b: 2, c: 2, d: 2,
+                southAwari: 17,
+                northAwari: 17);
+
+            board.Evaluate(4).Should().Be(0);
+        }
+        
+        [TestMethod]
+        public void Leaving_North_with_no_legal_move_is_allowed_and_move_played()
+        { 
+            // F can be played, gain of 12
+            var board = new AwariBoard(
+                F: 4,
+                a: 2, b: 2, c: 2, d: 2,
+                southAwari: 18,
+                northAwari: 18);
+
+            board.Evaluate(4).Should().Be(12);
+        }
+
+        [TestMethod]
+        public void I_can_get_the_best_score_for_the_initial_board_8_half_moves_deep()
         {
             var board = AwariBoard.GetInitialBoard();
 

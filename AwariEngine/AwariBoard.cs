@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace NeuralNetworksAwari.AwariEngine
 {
@@ -69,7 +71,7 @@ namespace NeuralNetworksAwari.AwariEngine
         }
 
         public AwariBoard Sow(string pit)
-        {            
+        {
             if (!PitIsOnSideToMove(pit))
             {
                 if (_position.History.Count > 0)
