@@ -51,6 +51,22 @@ namespace NeuralNetworksAwari.AwariEngineTests
             board.Evaluate(12).Should().Be(4);
         }
 
+        /// <summary>
+        /// Creates a pit with 13 on F, but after the capture of 4 
+        /// North can immediatly capture 2 back.
+        /// </summary>
+        [TestMethod]
+        public void I_can_get_the_best_score_for_14_stone_after_4_moves()
+        {
+            var board = new AwariBoard(
+                D: 1, E: 1, F: 11,
+                a: 1,
+                southAwari: 17,
+                northAwari: 17);
+
+            board.Evaluate(8).Should().Be(2);
+        }
+
         [TestMethod]
         public void I_can_get_the_best_score_for_the_initial_board()
         {
