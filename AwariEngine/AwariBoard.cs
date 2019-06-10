@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 
 namespace NeuralNetworksAwari.AwariEngine
 {
@@ -20,11 +18,11 @@ namespace NeuralNetworksAwari.AwariEngine
             int f=0, int e=0, int d=0, int c=0, int b=0, int a=0, 
             int A=0, int B=0, int C=0, int D=0, int E=0, int F=0,
             int southAwari=0, int northAwari=0, 
-            Player firstToMove = Player.South)
+            AwariPlayer firstToMove = AwariPlayer.South)
         {
             _evaluator = new AwariEvaluator();
             FirstToMove = firstToMove;
-            if (firstToMove == Player.South)
+            if (firstToMove == AwariPlayer.South)
             {
                 _position = new AwariPosition(new[]
                     { A, B, C, D, E, F,
@@ -50,9 +48,9 @@ namespace NeuralNetworksAwari.AwariEngine
             return _evaluator.Evaluate(_position, depth);
         }
 
-        public Player FirstToMove { get; private set; }
-        public int NorthAwari { get { return _position.Position[FirstToMove == Player.South ? AwariPosition.NORTH_AWARI: AwariPosition.SOUTH_AWARI]; } }
-        public int SouthAwari { get { return _position.Position[FirstToMove == Player.South ? AwariPosition.SOUTH_AWARI : AwariPosition.NORTH_AWARI]; } }
+        public AwariPlayer FirstToMove { get; private set; }
+        public int NorthAwari { get { return _position.Position[FirstToMove == AwariPlayer.South ? AwariPosition.NORTH_AWARI: AwariPosition.SOUTH_AWARI]; } }
+        public int SouthAwari { get { return _position.Position[FirstToMove == AwariPlayer.South ? AwariPosition.SOUTH_AWARI : AwariPosition.NORTH_AWARI]; } }
         public int TotalStones { get { return _position.Position.Sum(); } }
         public bool GameHasEnded { get { return SouthAwari + NorthAwari == 48; } }
 
@@ -60,7 +58,7 @@ namespace NeuralNetworksAwari.AwariEngine
         {
             get
             {
-                var position = FirstToMove == Player.South ? _position.Position : AwariPosition.FlipPosition(_position.Position);
+                var position = FirstToMove == AwariPlayer.South ? _position.Position : AwariPosition.FlipPosition(_position.Position);
                 return Enumerable.Range(0, 12).ToDictionary(x => ((char)(x < 6 ? 'A' + x : 'a' + x - 6)).ToString(), x => position[x]);
             }
         }
@@ -75,14 +73,14 @@ namespace NeuralNetworksAwari.AwariEngine
             if (!PitIsOnSideToMove(pit))
             {
                 if (_position.History.Count > 0)
-                    throw new ArgumentException($"{(FirstToMove == Player.South ? Player.North : Player.South)} already moved, a player cannot make two moves in a row.");
+                    throw new ArgumentException($"{(FirstToMove == AwariPlayer.South ? AwariPlayer.North : AwariPlayer.South)} already moved, a player cannot make two moves in a row.");
                 else
                     throw new ArgumentException($"Only South can make the first move (A-F).");
             }
             if (CanSow(pit))
             {
                 _position.Sow(GetPitIndex(pit));
-                FirstToMove = FirstToMove == Player.South ? Player.North : Player.South;
+                FirstToMove = FirstToMove == AwariPlayer.South ? AwariPlayer.North : AwariPlayer.South;
             }
             return this;
         }        
@@ -99,7 +97,7 @@ namespace NeuralNetworksAwari.AwariEngine
 
         private bool PitIsOnSideToMove(string pit)
         {
-            return FirstToMove == Player.South ^ pit.ToCharArray()[0] > 'F';
+            return FirstToMove == AwariPlayer.South ^ pit.ToCharArray()[0] > 'F';
         }
     }
 }

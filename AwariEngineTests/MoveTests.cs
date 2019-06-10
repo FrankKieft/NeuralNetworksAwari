@@ -9,7 +9,7 @@ namespace NeuralNetworksAwari.AwariEngineTests
     /// All rules based on http://web.cecs.pdx.edu/~bart/cs510games-summer2000/hw4/bart-awari-rules.html
     /// </summary>
     [TestClass]
-    public class AwariBoardMoveTests
+    public class MoveTests
     {
         private AwariBoard _initialBoard;
 
@@ -23,14 +23,14 @@ namespace NeuralNetworksAwari.AwariEngineTests
         public void R08_the_players_alternate_moves()
         {
             _initialBoard.Sow("B");
-            _initialBoard.FirstToMove.Should().Be(Player.North);
+            _initialBoard.FirstToMove.Should().Be(AwariPlayer.North);
             _initialBoard.Invoking(x => x.Sow("F")).Should().Throw<ArgumentException>().WithMessage("South already moved, a player cannot make two moves in a row.");
         }
 
         [TestMethod]
         public void R10_the_south_player_moves_first()
         {
-            _initialBoard.FirstToMove.Should().Be(Player.South);
+            _initialBoard.FirstToMove.Should().Be(AwariPlayer.South);
             _initialBoard.Invoking(x => x.Sow("c")).Should().Throw<ArgumentException>().WithMessage("Only south can make the first move (A-F).");
         }
 

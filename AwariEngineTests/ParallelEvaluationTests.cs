@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 namespace NeuralNetworksAwari.AwariEngineTests
 {
     [TestClass]
-    public partial class AwariParallelEvaluationTests
+    public partial class ParallelEvaluationTests
     {
         [TestMethod]
         public void I_can_get_the_best_score_for_the_initial_board_8_half_moves_deep_in_parallel()
         {
             const int depth = 8;
             var boards = new List<AwariBoard>();
-            var eval = new List<TestResult>();
+            var eval = new List<ParallelTestResult>();
 
             Enumerable.Range(0, 36).ToList().ForEach(x => boards.Add(AwariBoard.GetInitialBoard()));
             Parallel.For(0, 36, i =>
@@ -28,7 +28,7 @@ namespace NeuralNetworksAwari.AwariEngineTests
                     boards[i].Sow(firstMove);
                     if (boards[i].CanSow(secondMove))
                     {
-                        eval.Add(new TestResult
+                        eval.Add(new ParallelTestResult
                         {
                             Index = i,
                             FirstMove = firstMove,
@@ -38,7 +38,7 @@ namespace NeuralNetworksAwari.AwariEngineTests
                     }
                     else
                     {
-                        eval.Add(new TestResult
+                        eval.Add(new ParallelTestResult
                         {
                             Index = i,
                             FirstMove = firstMove,
@@ -49,7 +49,7 @@ namespace NeuralNetworksAwari.AwariEngineTests
             });
 
             eval.GroupBy(x => x.FirstMove)
-                .Select(x => new TestResult { FirstMove = x.Key, Evaluation = x.Min(y => y.Evaluation) })
+                .Select(x => new ParallelTestResult { FirstMove = x.Key, Evaluation = x.Min(y => y.Evaluation) })
                 .OrderByDescending(x => x.Evaluation)
                 .First()
                 .Evaluation.Should().Be(-1);

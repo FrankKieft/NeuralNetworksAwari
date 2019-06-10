@@ -10,7 +10,7 @@ namespace NeuralNetworksAwari.AwariEngineTests
     /// All rules based on http://web.cecs.pdx.edu/~bart/cs510games-summer2000/hw4/bart-awari-rules.html
     /// </summary>
     [TestClass]
-    public class AwariRulesBoardTests
+    public class AwariBoardTests
     {
         private AwariBoard _initialBoard;
                 
@@ -23,14 +23,14 @@ namespace NeuralNetworksAwari.AwariEngineTests
         [TestMethod]
         public void R01_Awari_is_a_two_player_game()
         {
-            Enum.GetNames(typeof(Player)).Count().Should().Be(2);
+            Enum.GetNames(typeof(AwariPlayer)).Count().Should().Be(2);
         }
 
         [TestMethod]
         public void R02_players_are_conventionally_designated_as_north_and_south()
         {
-            Enum.GetNames(typeof(Player))[0].Should().Be("South");
-            Enum.GetNames(typeof(Player))[1].Should().Be("North");
+            Enum.GetNames(typeof(AwariPlayer))[0].Should().Be("South");
+            Enum.GetNames(typeof(AwariPlayer))[1].Should().Be("North");
         }
 
         [TestMethod]

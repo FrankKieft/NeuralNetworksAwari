@@ -1,6 +1,6 @@
 ﻿namespace NeuralNetworksAwari.AwariEngine
 {
-    public enum Player
+    public enum AwariPlayer
     {
         South,
         North

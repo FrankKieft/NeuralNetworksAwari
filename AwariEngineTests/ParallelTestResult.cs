@@ -1,8 +1,8 @@
 ﻿namespace NeuralNetworksAwari.AwariEngineTests
 {
-    public partial class AwariParallelEvaluationTests
+    public partial class ParallelEvaluationTests
     {
-        public struct TestResult
+        public struct ParallelTestResult
         {
             public int Index { get; set; }
             public string FirstMove { get; set; }

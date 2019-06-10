@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-preview-20170618-03" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.1.17" />
     <PackageReference Include="MSTest.TestFramework" Version="1.1.17" />
+    <PackageReference Include="NSubstitute" Version="4.2.0" />
   </ItemGroup>
 
   <ItemGroup>

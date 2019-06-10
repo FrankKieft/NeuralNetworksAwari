@@ -5,7 +5,7 @@ using NeuralNetworksAwari.AwariEngine;
 namespace NeuralNetworksAwari.AwariEngineTests
 {
     [TestClass]
-    public class AwariEvaluationTests
+    public class EvaluationTests
     {
         [TestMethod]
         public void I_can_get_the_best_score_for_1_stone_after_1_moves()
