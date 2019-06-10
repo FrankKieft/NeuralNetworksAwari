@@ -10,11 +10,10 @@ namespace NeuralNetworksAwari.AwariEngineTests
     [TestClass]
     public partial class AwariParallelEvaluationTests
     {
-        private const int DEPTH = 8;
-
         [TestMethod]
-        public void I_can_get_the_best_score_for_the_initial_board_10_half_moves_deep_in_parallel()
+        public void I_can_get_the_best_score_for_the_initial_board_8_half_moves_deep_in_parallel()
         {
+            const int depth = 8;
             var boards = new List<AwariBoard>();
             var eval = new List<TestResult>();
 
@@ -34,7 +33,7 @@ namespace NeuralNetworksAwari.AwariEngineTests
                             Index = i,
                             FirstMove = firstMove,
                             SecondMove = secondMove,
-                            Evaluation = boards[i].Sow(secondMove).Evaluate(DEPTH)
+                            Evaluation = boards[i].Sow(secondMove).Evaluate(depth)
                         });
                     }
                     else
