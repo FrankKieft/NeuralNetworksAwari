@@ -8,18 +8,22 @@ namespace NeuralNetworksAwari.AwariEngine
     {
         public const int SOUTH_AWARI = 12;
         public const int NORTH_AWARI = 13;
-        private Func<int, int> NextPit = (x) => x += x < 11 ? 1 : -11;
-        private Stack<int> _lastCapture;
-
+        private Func<int, int> _nextPit = (x) => x += x < 11 ? 1 : -11;
+        private readonly int[] _previous;
+        
         public AwariPosition(int[] position)
         {
             Position = position;
             History = new List<int[]>();
-            _lastCapture = new Stack<int>();
-            _lastCapture.Push(0);
         }
 
-        public int[] Position { get; private set; }
+        public AwariPosition(AwariPosition position)
+        {
+            Position = position.Position;
+            History = position.History;
+        }
+
+        public int[] Position { get; protected set; }
         public List<int[]> History { get; }
 
         public static int[] FlipPosition(int[] position)
@@ -30,6 +34,18 @@ namespace NeuralNetworksAwari.AwariEngine
             newPosition[NORTH_AWARI] = position[SOUTH_AWARI];
             newPosition[SOUTH_AWARI] = position[NORTH_AWARI];
             return newPosition;
+        }
+
+        public virtual AwariPosition Copy()
+        {
+            var p = new AwariPosition(Position.ToList().ToArray());
+            History.ForEach(x => p.History.Add(x.ToList().ToArray()));
+            return p;
+        }
+
+        private void ForEach(Func<object, object> p)
+        {
+            throw new NotImplementedException();
         }
 
         public List<int> CanSow()
@@ -55,17 +71,15 @@ namespace NeuralNetworksAwari.AwariEngine
             return pits.Count == 0 ? noMoveLeftPits : pits;
         }
 
-        public void MoveBack()
+        public virtual void MoveBack()
         {
-            Position = History.Last();
-            _lastCapture.Pop();
-            History.Remove(Position);
+            Position = History[History.Count - 1];
+            History.RemoveAt(History.Count - 1);
         }
 
-        public void Sow(int pit)
+        public virtual void Sow(int pit)
         {
-            int[] previous = new int[14];
-
+            var previous = new int[14];
             Position.CopyTo(previous, 0);
 
             var stones = Position[pit];
@@ -74,8 +88,8 @@ namespace NeuralNetworksAwari.AwariEngine
             var p = pit;
             while (stones > 0)
             {
-                p = NextPit(p);
-                if (p == pit) p = NextPit(p);
+                p = _nextPit(p);
+                if (p == pit) p = _nextPit(p);
                 Position[p]++;
                 stones--;
             }
@@ -87,50 +101,16 @@ namespace NeuralNetworksAwari.AwariEngine
                 p--;
             }
 
-            if (Position[SOUTH_AWARI] > previous[SOUTH_AWARI])
-            {
-                _lastCapture.Push(0);
-            }
-            else
-            {
-                _lastCapture.Push(_lastCapture.Peek() + 1);
-            }
-
             Position = FlipPosition(Position);
             History.Add(previous);
 
-            if (Position[0] + Position[1] + Position[2] + Position[3] + Position[4] + Position[5] == 0)
+            if (Position[0]==0 && Position[1] == 0 && Position[2] == 0 && Position[3] == 0 && Position[4] == 0 && Position[5] == 0)
             {
                 for (var i = 6; i < 12; i++)
                 {
                     Position[i] = 0;
                 }
                 Position[NORTH_AWARI] = 48 - Position[SOUTH_AWARI];
-            }
-            else if (_lastCapture.Peek() > 11)
-            {
-                for (var i = History.Count - 2; i >= 0; i -= 2)
-                {
-                    if (Position[0] == History[i][0] &&
-                        Position[1] == History[i][1] &&
-                        Position[2] == History[i][2] &&
-                        Position[3] == History[i][3] &&
-                        Position[4] == History[i][4] &&
-                        Position[5] == History[i][5] &&
-                        Position[6] == History[i][6] &&
-                        Position[7] == History[i][7] &&
-                        Position[8] == History[i][8] &&
-                        Position[9] == History[i][9] &&
-                        Position[10] == History[i][10] &&
-                        Position[11] == History[i][11])
-                    {
-                        for (var j = 0; j < 12; j++)
-                        {
-                            Position[j < 6 ? SOUTH_AWARI : NORTH_AWARI] += Position[j];
-                            Position[j] = 0;
-                        }
-                    }
-                }
             }
         }
     }

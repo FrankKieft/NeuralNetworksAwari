@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NeuralNetworksAwari.AwariEngine
+namespace NeuralNetworksAwari.AwariEngine.Evaluations
 {
     public class AwariEvaluator
     {
@@ -8,7 +8,7 @@ namespace NeuralNetworksAwari.AwariEngine
         {
         }
         
-        public int Evaluate(AwariPosition position, int depth, int factor = 1)
+        public virtual int Evaluate(AwariPosition position, int depth)
         {
             if (depth==0)
             {

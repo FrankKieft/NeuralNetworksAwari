@@ -1,12 +1,21 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NeuralNetworksAwari.AwariEngine;
+using NeuralNetworksAwari.AwariEngine.Evaluations;
 
-namespace NeuralNetworksAwari.AwariEngineTests
+namespace NeuralNetworksAwari.AwariEngineTests.Evaluations
 {
     [TestClass]
-    public class EvaluationTests
+    public class ParallelEvaluationTests
     {
+        private AwariEvaluator _evaluator;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            _evaluator = new ParallelAwariEvaluator();
+        }
+
         [TestMethod]
         public void I_can_get_the_best_score_for_1_stone_after_1_moves()
         {
@@ -17,19 +26,19 @@ namespace NeuralNetworksAwari.AwariEngineTests
                 southAwari: 24,
                 northAwari: 19);
 
-            board.Evaluate(1).Should().Be(10);
+            board.Evaluate(_evaluator, 1).Should().Be(10);
         }
 
         [TestMethod]
         public void I_can_get_the_best_score_for_2_stones_after_6_moves()
         {
             var board = new AwariBoard(
-                F: 1, 
+                F: 1,
                 f: 1,
-                southAwari: 22, 
+                southAwari: 22,
                 northAwari: 24);
 
-            board.Evaluate(12).Should().Be(-2);
+            board.Evaluate(_evaluator, 12).Should().Be(-2);
         }
 
         [TestMethod]
@@ -41,7 +50,7 @@ namespace NeuralNetworksAwari.AwariEngineTests
                 southAwari: 21,
                 northAwari: 21);
 
-            board.Evaluate(12).Should().Be(4);
+            board.Evaluate(_evaluator, 12).Should().Be(4);
         }
 
         /// <summary>
@@ -57,7 +66,7 @@ namespace NeuralNetworksAwari.AwariEngineTests
                 southAwari: 17,
                 northAwari: 17);
 
-            board.Evaluate(8).Should().Be(2);
+            board.Evaluate(_evaluator, 8).Should().Be(2);
         }
 
         [TestMethod]
@@ -70,12 +79,12 @@ namespace NeuralNetworksAwari.AwariEngineTests
                 southAwari: 17,
                 northAwari: 17);
 
-            board.Evaluate(4).Should().Be(0);
+            board.Evaluate(_evaluator, 4).Should().Be(0);
         }
-        
+
         [TestMethod]
         public void Leaving_North_with_no_legal_move_is_allowed_and_move_played()
-        { 
+        {
             // F can be played, gain of 12
             var board = new AwariBoard(
                 F: 4,
@@ -83,7 +92,7 @@ namespace NeuralNetworksAwari.AwariEngineTests
                 southAwari: 18,
                 northAwari: 18);
 
-            board.Evaluate(4).Should().Be(12);
+            board.Evaluate(_evaluator, 4).Should().Be(12);
         }
 
         [TestMethod]
@@ -91,7 +100,7 @@ namespace NeuralNetworksAwari.AwariEngineTests
         {
             var board = AwariBoard.GetInitialBoard();
 
-            board.Evaluate(8).Should().Be(0);
+            board.Evaluate(_evaluator, 8).Should().Be(0);
         }
     }
 }
