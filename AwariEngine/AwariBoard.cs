@@ -49,8 +49,8 @@ namespace NeuralNetworksAwari.AwariEngine
         }
 
         public AwariPlayer FirstToMove { get; private set; }
-        public int NorthAwari { get { return _position.Position[FirstToMove == AwariPlayer.South ? FullAwariPosition.NORTH_AWARI: FullAwariPosition.SOUTH_AWARI]; } }
-        public int SouthAwari { get { return _position.Position[FirstToMove == AwariPlayer.South ? FullAwariPosition.SOUTH_AWARI : FullAwariPosition.NORTH_AWARI]; } }
+        public int NorthAwari { get { return _position.Position[FirstToMove == AwariPlayer.South ? AwariPositionWithRepetitionDetection.NORTH_AWARI: AwariPositionWithRepetitionDetection.SOUTH_AWARI]; } }
+        public int SouthAwari { get { return _position.Position[FirstToMove == AwariPlayer.South ? AwariPositionWithRepetitionDetection.SOUTH_AWARI : AwariPositionWithRepetitionDetection.NORTH_AWARI]; } }
         public int TotalStones { get { return _position.Position.Sum(); } }
         public bool GameHasEnded { get { return SouthAwari + NorthAwari == 48; } }
 
@@ -58,7 +58,7 @@ namespace NeuralNetworksAwari.AwariEngine
         {
             get
             {
-                var position = FirstToMove == AwariPlayer.South ? _position.Position : FullAwariPosition.FlipPosition(_position.Position);
+                var position = FirstToMove == AwariPlayer.South ? _position.Position : AwariPositionWithRepetitionDetection.FlipPosition(_position.Position);
                 return Enumerable.Range(0, 12).ToDictionary(x => ((char)(x < 6 ? 'A' + x : 'a' + x - 6)).ToString(), x => position[x]);
             }
         }
@@ -88,9 +88,9 @@ namespace NeuralNetworksAwari.AwariEngine
         
         private void SetFullAwariPosition()
         {
-            if (!(_position is FullAwariPosition) && NorthAwari + SouthAwari > 34)
+            if (!(_position is AwariPositionWithRepetitionDetection) && NorthAwari + SouthAwari > 34)
             {
-                _position = new FullAwariPosition(_position);
+                _position = new AwariPositionWithRepetitionDetection(_position);
             }
         }
 

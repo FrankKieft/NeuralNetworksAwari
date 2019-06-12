@@ -2,11 +2,11 @@
 
 namespace NeuralNetworksAwari.AwariEngine
 {
-    public class FullAwariPosition: AwariPosition
+    public class AwariPositionWithRepetitionDetection: AwariPosition
     {
         private Stack<int> _lastCapture;
 
-        public FullAwariPosition(AwariPosition awariPosition) : base(awariPosition)
+        public AwariPositionWithRepetitionDetection(AwariPosition awariPosition) : base(awariPosition)
         {
             _lastCapture = new Stack<int>();
             _lastCapture.Push(0);
@@ -14,7 +14,7 @@ namespace NeuralNetworksAwari.AwariEngine
 
         public override AwariPosition Copy()
         {
-            return new FullAwariPosition(base.Copy());
+            return new AwariPositionWithRepetitionDetection(base.Copy());
         }
 
         public override void MoveBack()

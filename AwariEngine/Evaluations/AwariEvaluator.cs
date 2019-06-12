@@ -10,6 +10,11 @@ namespace NeuralNetworksAwari.AwariEngine.Evaluations
         
         public virtual int Evaluate(AwariPosition position, int depth)
         {
+            return EvaluateRecursive(position, depth);
+        }
+
+        protected int EvaluateRecursive(AwariPosition position, int depth)
+        {
             if (depth==0)
             {
                 return position.Position[AwariPosition.SOUTH_AWARI] - position.Position[AwariPosition.NORTH_AWARI];
@@ -25,7 +30,7 @@ namespace NeuralNetworksAwari.AwariEngine.Evaluations
                 }
                 position.Sow(i);
 
-                var evaluationResult = -Evaluate(position, depth - 1);
+                var evaluationResult = -EvaluateRecursive(position, depth - 1);
                 if (evaluationResult > finalEvaluationResult)
                 {
                     if (evaluationResult == 1000)

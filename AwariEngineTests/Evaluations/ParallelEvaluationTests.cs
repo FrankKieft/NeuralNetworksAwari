@@ -17,7 +17,7 @@ namespace NeuralNetworksAwari.AwariEngineTests.Evaluations
         }
 
         [TestMethod]
-        public void I_can_get_the_best_score_for_1_stone_after_1_moves()
+        public void Returns_the_best_score_in_case_of_a_grand_slam()
         {
             var board = new AwariBoard(
                 F: 2,
@@ -26,11 +26,11 @@ namespace NeuralNetworksAwari.AwariEngineTests.Evaluations
                 southAwari: 24,
                 northAwari: 19);
 
-            board.Evaluate(_evaluator, 1).Should().Be(10);
+            board.Evaluate(_evaluator, 12).Should().Be(10);
         }
 
         [TestMethod]
-        public void I_can_get_the_best_score_for_2_stones_after_6_moves()
+        public void Returns_the_best_score_when_game_ended_after_repetition_of_position()
         {
             var board = new AwariBoard(
                 F: 1,
@@ -42,7 +42,7 @@ namespace NeuralNetworksAwari.AwariEngineTests.Evaluations
         }
 
         [TestMethod]
-        public void I_can_get_the_best_score_for_6_stones_after_5_moves()
+        public void Returns_the_best_score_for_6_stones()
         {
             var board = new AwariBoard(
                 A: 1, E: 1, F: 2,
@@ -58,7 +58,7 @@ namespace NeuralNetworksAwari.AwariEngineTests.Evaluations
         /// North can immediatly capture 2 back.
         /// </summary>
         [TestMethod]
-        public void I_can_get_the_best_score_for_14_stones_after_4_moves()
+        public void Returns_the_best_score_for_14_stones_after_4_moves()
         {
             var board = new AwariBoard(
                 D: 1, E: 1, F: 11,
@@ -96,11 +96,11 @@ namespace NeuralNetworksAwari.AwariEngineTests.Evaluations
         }
 
         [TestMethod]
-        public void I_can_get_the_best_score_for_the_initial_board_8_half_moves_deep()
+        public void I_can_get_the_best_score_for_the_initial_board_5_moves()
         {
             var board = AwariBoard.GetInitialBoard();
 
-            board.Evaluate(_evaluator, 8).Should().Be(0);
+            board.Evaluate(_evaluator, 10).Should().Be(-1);
         }
     }
 }
