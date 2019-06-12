@@ -9,7 +9,6 @@ namespace NeuralNetworksAwari.AwariEngine
         public const int SOUTH_AWARI = 12;
         public const int NORTH_AWARI = 13;
         private Func<int, int> _nextPit = (x) => x += x < 11 ? 1 : -11;
-        private readonly int[] _previous;
         
         public AwariPosition(int[] position)
         {
@@ -41,11 +40,6 @@ namespace NeuralNetworksAwari.AwariEngine
             var p = new AwariPosition(Position.ToList().ToArray());
             History.ForEach(x => p.History.Add(x.ToList().ToArray()));
             return p;
-        }
-
-        private void ForEach(Func<object, object> p)
-        {
-            throw new NotImplementedException();
         }
 
         public List<int> CanSow()

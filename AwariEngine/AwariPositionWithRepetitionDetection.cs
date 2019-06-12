@@ -38,7 +38,7 @@ namespace NeuralNetworksAwari.AwariEngine
 
         private void EndGameIfPositionIsRepeated()
         {
-            for (var i = History.Count - 2; i >= 0; i -= 2)
+            for (var i = History.Count - 2; i >= History.Count - _lastCapture.Peek(); i -= 2)
             {
                 if (Position[0] == History[i][0] &&
                     Position[1] == History[i][1] &&
