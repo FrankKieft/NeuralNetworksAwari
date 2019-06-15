@@ -16,9 +16,13 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
         public Guid Key { get; }
         public Dictionary<Guid, double> WeightingFactors { get; private set; }
 
-        public void AcceptSignal(INeuron neuron)
+        public void AcceptSignal(INeuron[] neurons)
         {
-            Value += WeightingFactors[neuron.Key] * neuron.Value;
+            Value = 0;
+            for (var i = 0; i < neurons.Length; i++)
+            {
+                Value += neurons[i].Value * WeightingFactors[neurons[i].Key];
+            }
         }
     }
 }

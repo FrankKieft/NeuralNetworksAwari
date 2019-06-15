@@ -25,6 +25,7 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
                     Value += WeightingFactors[i];
                 }
             }
+            Value = Value / 48;
         }
     }
 }

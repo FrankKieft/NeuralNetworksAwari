@@ -14,23 +14,22 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
         [TestInitialize]
         public void Initialize()
         {
-            _weightingFactors = Enumerable.Range(0, 12 * 48).ToList().Select(x => 1d).ToArray();
+            _weightingFactors = Enumerable.Range(0, 12 * 48).ToList().Select(x => 0.5d).ToArray();
         }
 
         [TestMethod]
-        public void When_passing_an_Awari_position_the_input_neuron_calculates_a_value_equal_to_the_number_of_stones_when_all_weighting_factors_are_1()
+        public void When_passing_an_Awari_position_the_input_neuron_calculates_a_value_that_is_equal_to_the_avarage_of_the_used_weighting_factors()
         {
             // Arrange
-            var awariPits = new [] { 4, 4, 4, 4, 4, 4, 8, 3, 0, 0, 4, 2 };
-            var expected = awariPits.Sum();
-
+            var awariPits = new [] { 4, 4, 4, 4, 4, 4, 8, 8, 0, 0, 4, 4 };
+            
             var inputNeuron = new InputNeuron(Guid.Empty, _weightingFactors);
 
             // Act
             inputNeuron.AcceptAwariPits(awariPits);
 
             // Assert
-            inputNeuron.Value.Should().Be(expected);
+            inputNeuron.Value.Should().Be(0.5d);
         }
     }
 }

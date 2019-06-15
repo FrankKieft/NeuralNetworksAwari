@@ -7,6 +7,6 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces
     {
         Dictionary<Guid, double> WeightingFactors { get; }
 
-        void AcceptSignal(INeuron neuron);
+        void AcceptSignal(INeuron[] neuron);
     }
 }
