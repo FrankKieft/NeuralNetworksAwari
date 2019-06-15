@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces
 {
     public interface IOutputNeuron: INeuron
     {
-        void Subscribe(Guid key);
+        Dictionary<Guid, double> WeightingFactors { get; }
+
         void AcceptSignal(INeuron neuron);
-        void Reset();
     }
 }

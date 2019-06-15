@@ -1,28 +1,20 @@
 ﻿using NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
 {
-    public class InputNeuron : INeuron
+    public class InputNeuron : IInputNeuron
     {
-        private List<IOutputNeuron> _neurons;
-        private double[] _weightingFactors;
-
-        public InputNeuron(List<IOutputNeuron> neurons, IRandomizer random)
+        public InputNeuron(Guid key, double[] weightingFactors)
         {
-            Key = Guid.NewGuid();
-            _neurons = neurons;
-            _neurons.ForEach(x => x.Subscribe(Key));
-            _weightingFactors = new double[572];
-            Enumerable.Range(0, 572).ToList().ForEach(x => _weightingFactors[x]=random.GetDouble());
+            WeightingFactors = weightingFactors;
         }
 
         public Guid Key { get; }
         public double Value { get; private set; }
+        public double[] WeightingFactors { get; private set; }
 
-        public void Accept(int[] pits)
+        public void AcceptAwariPits(int[] pits)
         {
             for(var i=0; i<572; i++)
             {
@@ -30,14 +22,9 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
                 var stones = i % 48;
                 if (pits[pit] > stones)
                 {
-                    Value += _weightingFactors[i];
+                    Value += WeightingFactors[i];
                 }
             }
-        }
-
-        public void SendSignal()
-        {
-            _neurons.ForEach(x => x.AcceptSignal(this));
         }
     }
 }

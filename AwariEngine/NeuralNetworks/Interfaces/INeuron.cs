@@ -6,6 +6,5 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces
     {
         Guid Key { get; }
         double Value { get; }
-        void SendSignal();
     }
 }
