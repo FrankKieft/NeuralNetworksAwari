@@ -18,7 +18,7 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
         }
 
         [TestMethod]
-        public void When_passing_an_Awari_position_the_input_neuron_calculates_a_value_that_is_equal_to_the_avarage_of_the_used_weighting_factors()
+        public void When_passing_an_Awari_position_the_input_neuron_calculates_a_value_that_is_equal_to_the_the_used_weighting_factors_multiplied_by_stones()
         {
             // Arrange
             var awariPits = new [] { 4, 4, 4, 4, 4, 4, 8, 8, 0, 0, 4, 4 };
@@ -29,7 +29,7 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
             inputNeuron.AcceptAwariPits(awariPits);
 
             // Assert
-            inputNeuron.Value.Should().Be(0.5d);
+            inputNeuron.Value.Should().Be(24d);
         }
     }
 }

@@ -3,8 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NeuralNetworksAwari.AwariEngine.NeuralNetworks;
 using NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
 
 namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
 {
