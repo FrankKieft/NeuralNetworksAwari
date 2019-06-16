@@ -1,8 +1,7 @@
 ﻿namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces
 {
-    public interface ILearningOutputNeuron: INeuron
+    public interface ILearning: INeuron
     {
         void Learn(double factor);
-        void AcceptSignal(ILearningOutputNeuron[] neuron);
     }
 }

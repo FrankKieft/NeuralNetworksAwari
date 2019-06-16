@@ -1,28 +1,14 @@
 ﻿using NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
 {
-    public class LearningOutputNeuron : INeuron
+    public class LearningOutputNeuron : OutputNeuron, ILearning
     {
-        private  List<ILearningOutputNeuron> _previousNeuronLayer;
-        private readonly IOutputNeuron _neuron;
+        private  ILearning[] _previousNeuronLayer;
 
-        public LearningOutputNeuron(IOutputNeuron neuron)
+        public LearningOutputNeuron(int index, double[] weightingFactors, ILearning[] previousNeuronLayer):base(index,weightingFactors)
         {
-            _neuron = neuron;
-        }
-
-        public double Value { get { return _neuron.Value; } }
-        public Guid Key { get { return _neuron.Key; } }
-        public Dictionary<Guid, double> WeightingFactors { get { return _neuron.WeightingFactors; } }
-        
-        public void AcceptSignal(ILearningOutputNeuron[] neurons)
-        {
-            _previousNeuronLayer = neurons.ToList();
-            _neuron.AcceptSignal(neurons);
+            _previousNeuronLayer = previousNeuronLayer;
         }
 
         public void Learn(double factor)
@@ -32,12 +18,12 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
                 if (n.Value>0)
                 {
                     n.Learn(factor);
-                    WeightingFactors[n.Key] += factor * n.Value;
+                    WeightingFactors[n.Index] += factor * n.Value;
                 }
                 else
                 {
                     n.Learn(-factor);
-                    WeightingFactors[n.Key] *= 1 - factor;
+                    WeightingFactors[n.Index] *= 1 - factor;
                 }
             }
         }

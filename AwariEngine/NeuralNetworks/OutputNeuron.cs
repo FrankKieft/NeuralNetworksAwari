@@ -1,27 +1,25 @@
 ﻿using NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces;
-using System;
-using System.Collections.Generic;
 
 namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
 {
-    public class OutputNeuron : IOutputNeuron
+    public class OutputNeuron : INeuron, IOutput
     {
-        public OutputNeuron(Guid key, Dictionary<Guid, double> weightingFactors)
+        public OutputNeuron(int index, double[] weightingFactors)
         {
-            Key = key;
+            Index=index;
             WeightingFactors = weightingFactors;
         }
         
-        public double Value { get; set; }
-        public Guid Key { get; }
-        public Dictionary<Guid, double> WeightingFactors { get; private set; }
+        public double Value { get; protected set; }
+        public int Index { get; }
+        public double[] WeightingFactors { get; }
 
         public void AcceptSignal(INeuron[] neurons)
         {
             Value = 0;
             for (var i = 0; i < neurons.Length; i++)
             {
-                Value += neurons[i].Value * WeightingFactors[neurons[i].Key];
+                Value += neurons[i].Value * WeightingFactors[neurons[i].Index];
             }
         }
     }

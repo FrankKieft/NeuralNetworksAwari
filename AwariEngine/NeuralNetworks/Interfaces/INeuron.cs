@@ -1,10 +1,9 @@
-﻿using System;
-
-namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces
+﻿namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces
 {
     public interface INeuron
     {
-        Guid Key { get; }
+        int Index { get; }
         double Value { get; }
+        double[] WeightingFactors { get; }
     }
 }

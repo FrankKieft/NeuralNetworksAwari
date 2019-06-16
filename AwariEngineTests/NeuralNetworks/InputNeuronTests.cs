@@ -23,7 +23,7 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
             // Arrange
             var awariPits = new [] { 4, 4, 4, 4, 4, 4, 8, 8, 0, 0, 4, 4 };
             
-            var inputNeuron = new InputNeuron(Guid.Empty, _weightingFactors);
+            var inputNeuron = new InputNeuron(0, _weightingFactors);
 
             // Act
             inputNeuron.AcceptAwariPits(awariPits);

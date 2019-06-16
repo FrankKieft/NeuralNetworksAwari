@@ -20,11 +20,11 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
             // Arrange
             var expected = factor * inputValue;
 
-            var inputNeuron = Substitute.For<IInputNeuron>();
+            var inputNeuron = Substitute.For<IInput>();
             inputNeuron.Value.Returns(inputValue);
-            inputNeuron.Key.Returns(Guid.Parse("123456789012345678901234567890AB"));
+            inputNeuron.Index.Returns(0);
 
-            var outputNeuron = new OutputNeuron(Guid.Empty, new Dictionary<Guid, double> { { inputNeuron.Key, factor } });
+            var outputNeuron = new OutputNeuron(0, new[] { factor });
             
             // Act
             outputNeuron.AcceptSignal(new [] { inputNeuron });
@@ -42,11 +42,11 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
             // Arrange
             var expected = factor * value;
 
-            var neuron = Substitute.For<IOutputNeuron>();
+            var neuron = Substitute.For<IOutput>();
             neuron.Value.Returns(value);
-            neuron.Key.Returns(Guid.Parse("123456789012345678901234567890AB"));
+            neuron.Index.Returns(0);
 
-            var outputNeuron = new OutputNeuron(Guid.Empty, new Dictionary<Guid, double> { { neuron.Key, factor } });
+            var outputNeuron = new OutputNeuron(0, new[] { factor });
 
             // Act
             outputNeuron.AcceptSignal(new[] { neuron });

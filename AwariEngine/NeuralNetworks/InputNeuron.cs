@@ -1,20 +1,20 @@
 ﻿using NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces;
-using System;
 
 namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
 {
-    public class InputNeuron : IInputNeuron
+    public class InputNeuron : INeuron, IInput
     {
-        public InputNeuron(Guid key, double[] weightingFactors)
+        public InputNeuron(int index, double[] weightingFactors)
         {
+            Index = index;
             WeightingFactors = weightingFactors;
         }
 
-        public Guid Key { get; }
+        public int Index { get;  }
         public double Value { get; private set; }
-        public double[] WeightingFactors { get; private set; }
-
-        public void AcceptAwariPits(int[] pits)
+        public double[] WeightingFactors { get; }
+        
+        public virtual void AcceptAwariPits(int[] pits)
         {
             for(var i=0; i<572; i++)
             {
