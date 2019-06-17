@@ -96,11 +96,11 @@ namespace NeuralNetworksAwari.AwariEngineTests.Evaluations
         }
 
         [TestMethod]
-        public void I_can_get_the_best_score_for_the_initial_board_5_moves()
+        public void I_can_get_the_best_score_for_the_initial_board_4_moves()
         {
             var board = AwariBoard.GetInitialBoard();
 
-            board.Evaluate(_evaluator, 10).Should().Be(-1);
+            board.Evaluate(_evaluator, 8).Should().Be(0);
         }
     }
 }

@@ -3,7 +3,7 @@
     public interface INeuron
     {
         int Index { get; }
-        double Value { get; }
         double[] WeightingFactors { get; }
+        void Learn(double factor);
     }
 }

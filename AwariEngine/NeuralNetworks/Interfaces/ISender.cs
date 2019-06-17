@@ -1,7 +1,7 @@
 ﻿namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces
 {
-    public interface IOutput : IReceiver
+    public interface ISender : INeuron
     {
-        double Value { get; }
+        bool Signal { get; }
     }
 }

@@ -2,34 +2,39 @@
 
 namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
 {
-    public class OutputNeuron : IOutput
+    public class IntermediateNeuron : IReceiver, ISender
     {
         private ISender[] _previousNeuronLayer;
-        private double _denominator;
+        private double _threshold;
 
-        public OutputNeuron(int index, double[] weightingFactors, ISender[] previousNeuronLayer)
+        public IntermediateNeuron(int index, double[] weightingFactors, ISender[] previousNeuronLayer)
         {
             _previousNeuronLayer = previousNeuronLayer;
-            _denominator = _previousNeuronLayer.Length / 2d;
-            Index =index;
+            _threshold = _previousNeuronLayer.Length / 2d;
+            Index = index;
             WeightingFactors = weightingFactors;
         }
-        
-        public double Value { get; protected set; }
+
+        public bool Signal { get; protected set; }
         public int Index { get; }
         public double[] WeightingFactors { get; }
 
         public void AcceptSignal()
         {
-            Value = 0;
+            var value = 0d;
             for (var i = 0; i < _previousNeuronLayer.Length; i++)
             {
                 if (_previousNeuronLayer[i].Signal)
                 {
-                    Value += WeightingFactors[i];
+                    value += WeightingFactors[i];
+                    if (value>=_threshold)
+                    {
+                        Signal = true;
+                        return;
+                    }
                 }
             }
-            Value /= _denominator;
+            Signal = false;
         }
 
         public void Learn(double factor)

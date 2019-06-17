@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NeuralNetworksAwari.AwariEngine.NeuralNetworks;
-using System;
 using System.Linq;
 
 namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
@@ -9,27 +8,53 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
     [TestClass]
     public class InputNeuronTests
     {
-        private double[] _weightingFactors;
-
-        [TestInitialize]
-        public void Initialize()
+        [TestMethod]
+        public void When_passing_an_Awari_position_the_input_neuron_passes_a_signal_when_all_weighting_factors_are_above_half()
         {
-            _weightingFactors = Enumerable.Range(0, 12 * 48).ToList().Select(x => 0.5d).ToArray();
+            NeuronTest(.06d, false);
         }
 
         [TestMethod]
-        public void When_passing_an_Awari_position_the_input_neuron_calculates_a_value_that_is_equal_to_the_the_used_weighting_factors_multiplied_by_stones()
+        public void When_passing_an_Awari_position_the_input_neuron_passes_a_signal_when_all_weighting_factors_are_below_half()
+        {
+            NeuronTest(.04d, false);
+        }
+
+        [TestMethod]
+        public void InputNeuron_decreases_the_weighting_factors_with_1_percent_when_input_signal_was_1()
+        {
+            LearningTest(new[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0.505d);
+        }
+
+        [TestMethod]
+        public void InputNeuron_decreases_the_weighting_factors_with_1_percent_when_input_signal_was_0()
+        {
+            LearningTest(new[] { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0.495d);
+        }
+
+        private void LearningTest(int[] pits, double expected)
+        {
+            var weightingFactors = Enumerable.Range(0, 12 * 47 + 48).ToList().Select(x => 0.5d).ToArray();
+            var neuron = new InputNeuron(0, weightingFactors);
+            neuron.AcceptAwariPits(pits, 47);
+            neuron.Learn(0.01d);
+
+            neuron.WeightingFactors[48].Should().Be(expected);
+        }
+
+        private void NeuronTest(double factor, bool expected)
         {
             // Arrange
-            var awariPits = new [] { 4, 4, 4, 4, 4, 4, 8, 8, 0, 0, 4, 4 };
-            
-            var inputNeuron = new InputNeuron(0, _weightingFactors);
+            var weightingFactors = Enumerable.Range(0, 12 * 47 + 48).ToList().Select(x => factor).ToArray();
+            var awariPits = new[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+
+            var inputNeuron = new InputNeuron(0, weightingFactors);
 
             // Act
-            inputNeuron.AcceptAwariPits(awariPits);
+            inputNeuron.AcceptAwariPits(awariPits, 36);
 
             // Assert
-            inputNeuron.Value.Should().Be(24d);
+            inputNeuron.Signal.Should().Be(expected);
         }
     }
 }

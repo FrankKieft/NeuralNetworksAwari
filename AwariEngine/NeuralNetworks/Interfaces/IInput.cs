@@ -1,7 +1,7 @@
 ﻿namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces
 {
-    public interface IInput: INeuron
+    public interface IInput: ISender
     {
-        void AcceptAwariPits(int[] pits);
+        void AcceptAwariPits(int[] pits, int totalPits);
     }
 }
