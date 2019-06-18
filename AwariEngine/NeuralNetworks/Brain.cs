@@ -34,6 +34,12 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
                 .Select(x => new OutputNeuron(x, GetWeightingFactors(INTERMEDIATE_NEURONS), _intermediates)).ToArray();
         }
 
+        /// <summary>
+        /// Likelyness of each possible outcome. 
+        /// </summary>
+        /// <param name="pits">Values of 12 pits</param>
+        /// <param name="capturedStones">Stones not in pit to make the total 48</param>
+        /// <returns>97 Output neurons. Each neuron representing a possible score. Index 0 is -48 until 97 is +48. Index 48 being equality or 0.</returns>
         public IOutput[] Evaluate(int[] pits, int capturedStones)
         {
             for (var i=0; i<_inputs.Length; i++)

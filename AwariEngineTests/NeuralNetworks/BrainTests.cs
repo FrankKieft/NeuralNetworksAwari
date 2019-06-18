@@ -31,7 +31,7 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
         }
 
         [TestMethod]
-        public void The_brain_can_learn()
+        public void The_brain_can_learn_because_likelyness_of_preferred_outcome_is_higher()
         {
             var brain = new Brain(new Randomizer());
 
