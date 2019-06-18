@@ -41,7 +41,7 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
 
             var after = brain.Evaluate(_testPosition, 0)[48].Value;
 
-            before.Should().NotBe(after);
+            after.Should().BeGreaterThan(before);
         }
 
         private void BrainTest(double factor, double expected)
