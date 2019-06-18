@@ -12,33 +12,33 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
         private const double FACTOR = .55d;
 
         [TestMethod]
-        public void When_passing_a_signal_neuron_passes_a_signal_if_weighting_factor_is_above_half()
+        public void When_passing_a_signal_neuron_passes_a_signal_if_weighting_factor_is_above_0_25()
         {
-            NeuronTest(signal: true, factor: 0.6d, expected: true);
+            NeuronTest(signal: true, factor: 0.3d, expected: true);
         }
 
         [TestMethod]
-        public void When_passing_a_signal_neuron_passes_no_signal_if_weighting_factor_is_below_half()
+        public void When_passing_a_signal_neuron_passes_no_signal_if_weighting_factor_is_below_0_25()
         {
-            NeuronTest(signal: true, factor: 0.4d, expected: false);
+            NeuronTest(signal: true, factor: 0.2d, expected: false);
         }
 
         [TestMethod]
         public void When_not_passing_a_signal_neuron_passes_no_signal()
         {
-            NeuronTest(signal: false, factor: 0.6d, expected: false);
+            NeuronTest(signal: false, factor: 0.9d, expected: false);
         }
 
         [TestMethod]
         public void Neuron_increases_the_weighting_factors_with_1_percent_if_signal()
         {
-            LearningTest(true, 0.505d);
+            LearningTest(true, 0.51d);
         }
 
         [TestMethod]
         public void Neuron_decreases_the_weighting_factors_with_1_percent_if_no_signal()
         {
-            LearningTest(false, 0.495d);
+            LearningTest(false, 0.49d);
         }
 
         private void LearningTest(bool signal, double expected)

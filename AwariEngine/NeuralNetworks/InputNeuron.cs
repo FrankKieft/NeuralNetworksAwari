@@ -13,7 +13,7 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
             WeightingFactors = weightingFactors;
         }
 
-        public int Index { get;  }
+        public int Index { get; }
         public bool Signal { get; private set; }
         public double[] WeightingFactors { get; }
 
@@ -25,15 +25,15 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
 
             for (var i = 0; i < stonesCaptured; i++)
             {
-                    value += WeightingFactors[i];
-                    if (value >= 24d)
-                    {
-                        Signal = true;
-                        return;
-                    }
+                value += WeightingFactors[i];
+                if (value >= 24d)
+                {
+                    Signal = true;
+                    return;
+                }
             }
 
-            for (var i=0; i<564; i++)
+            for (var i = 0; i < 564; i++)
             {
                 var pit = i / 47;
                 var stones = i % 47;
@@ -55,13 +55,13 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
         {
             for (var i = 0; i < 48; i++)
             {
-                if (i<_stonesCaptured)
+                if (i < _stonesCaptured)
                 {
-                    WeightingFactors[i] *= 1 + factor;
+                    WeightingFactors[i] += factor;
                 }
                 else
                 {
-                    WeightingFactors[i] *= 1 - factor;
+                    WeightingFactors[i] -= factor;
                 }
             }
 
@@ -71,11 +71,11 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
                 var stones = i % 47;
                 if (_pits[pit] > stones)
                 {
-                    WeightingFactors[i+48] *= 1 + factor;
+                    WeightingFactors[i + 48] += factor;
                 }
                 else
                 {
-                    WeightingFactors[i+48] *= 1 - factor;
+                    WeightingFactors[i + 48] -= factor;
                 }
             }
         }

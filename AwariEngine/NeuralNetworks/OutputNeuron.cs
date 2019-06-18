@@ -39,12 +39,12 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
                 if (n.Signal)
                 {
                     n.Learn(factor);
-                    WeightingFactors[n.Index] *= 1 + factor;
+                    WeightingFactors[n.Index] += factor;
                 }
                 else
                 {
                     n.Learn(-factor);
-                    WeightingFactors[n.Index] *= 1 - factor;
+                    WeightingFactors[n.Index] -= factor;
                 }
             }
         }

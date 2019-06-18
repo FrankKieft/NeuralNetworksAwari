@@ -1,7 +1,6 @@
 ﻿using System;
-using NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces;
 
-namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
+namespace NeuralNetworksAwari.AwariEngine.Util
 {
     public class Randomizer : IRandomizer
     {

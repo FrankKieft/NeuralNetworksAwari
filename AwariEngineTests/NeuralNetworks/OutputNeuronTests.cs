@@ -26,13 +26,13 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
         [TestMethod]
         public void OutputNeuron_increases_the_weighting_factors_with_1_percent_if_signal()
         {
-            LearningTest(true, 0.505d);
+            LearningTest(true, 0.51d);
         }
 
         [TestMethod]
         public void OutputNeuron_decreases_the_weighting_factors_with_1_percent_if_no_signal()
         {
-            LearningTest(false, 0.495d);
+            LearningTest(false, 0.49d);
         }
 
         private void LearningTest(bool signal, double expected)

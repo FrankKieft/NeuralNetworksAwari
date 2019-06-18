@@ -1,6 +1,6 @@
 ﻿using NeuralNetworksAwari.AwariEngine.NeuralNetworks;
 using NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces;
-using System;
+using NeuralNetworksAwari.AwariEngine.Util;
 using System.Linq;
 
 namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
@@ -58,16 +58,20 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
         {
             var scores = Evaluate(pits, capturedStones);
 
-            var highScore = scores.ToList().OrderByDescending(x => x.Value).First();
-
-            if (highScore.Index != 48+score)
+            var highScores = scores.ToList().OrderByDescending(x => x.Value).ToList();
+            var i = 0;
+            while ((i == 0 || highScores[i].Value >= 1d) && i != score + 48 && highScores[i].Value > 0d)
             {
-                highScore.Learn(-FACTOR);
+                highScores[i++].Learn(-FACTOR);
+
             }
 
-            scores[48 + score].Learn(FACTOR);
+            if (scores[48 + score].Value < 1d)
+            {
+                scores[48 + score].Learn(FACTOR);
+            }
         }
-
+        
         private double[] GetWeightingFactors(int n)
         {
             var factors = new double[n];

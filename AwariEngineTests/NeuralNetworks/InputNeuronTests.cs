@@ -23,13 +23,13 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
         [TestMethod]
         public void InputNeuron_decreases_the_weighting_factors_with_1_percent_when_input_signal_was_1()
         {
-            LearningTest(new[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0.505d);
+            LearningTest(new[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0.51d);
         }
 
         [TestMethod]
         public void InputNeuron_decreases_the_weighting_factors_with_1_percent_when_input_signal_was_0()
         {
-            LearningTest(new[] { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0.495d);
+            LearningTest(new[] { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0.49d);
         }
 
         private void LearningTest(int[] pits, double expected)

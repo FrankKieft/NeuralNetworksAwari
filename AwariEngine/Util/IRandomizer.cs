@@ -1,4 +1,4 @@
-﻿namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces
+﻿namespace NeuralNetworksAwari.AwariEngine.Util
 {
     public interface IRandomizer
     {

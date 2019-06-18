@@ -10,7 +10,7 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
         public IntermediateNeuron(int index, double[] weightingFactors, ISender[] previousNeuronLayer)
         {
             _previousNeuronLayer = previousNeuronLayer;
-            _threshold = _previousNeuronLayer.Length / 2d;
+            _threshold = _previousNeuronLayer.Length / 4d;
             Index = index;
             WeightingFactors = weightingFactors;
         }
@@ -44,12 +44,12 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
                 if (n.Signal)
                 {
                     n.Learn(factor);
-                    WeightingFactors[n.Index] *= 1 + factor;
+                    WeightingFactors[n.Index] += factor;
                 }
                 else
                 {
                     n.Learn(-factor);
-                    WeightingFactors[n.Index] *= 1 - factor;
+                    WeightingFactors[n.Index] -= factor;
                 }
             }
         }
