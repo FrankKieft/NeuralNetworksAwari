@@ -1,6 +1,8 @@
 ﻿using NeuralNetworksAwari.AwariEngine.NeuralNetworks;
 using NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces;
 using NeuralNetworksAwari.AwariEngine.Util;
+using System;
+using System.IO;
 using System.Linq;
 
 namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
@@ -15,15 +17,15 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
         private const double FACTOR = 0.01d;
 
         private IRandomizer _randomizer;
-
+        private readonly IFactorRepository repository;
         private readonly InputNeuron[] _inputs;
         private readonly IntermediateNeuron[] _intermediates;
         private readonly OutputNeuron[] _outputs;
 
-        public Brain(IRandomizer randomizer)
+        public Brain(IRandomizer randomizer, IFactorRepository repository)
         {
             _randomizer = randomizer;
-
+            this.repository = repository;
             _inputs = Enumerable.Range(0, INPUT_NEURONS).ToList()
                 .Select(x => new InputNeuron(x, GetWeightingFactors(AWARI_PARAMETERS))).ToArray();
 
@@ -78,6 +80,32 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
             }
         }
         
+        public void StoreWeightFactors()
+        {
+            StoreWeightFactors("input", _inputs);
+            StoreWeightFactors("intermediate", _inputs);
+            StoreWeightFactors("output", _inputs);
+        }
+
+        public void StoreWeightFactors(string name, INeuron[] neurons)
+        {
+            var directory = $"{Environment.CurrentDirectory}\\factors";
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+            
+            for (var i=0; i< neurons.Length; i++)
+            {
+                using (var sw = new StreamWriter($"{directory}\\{name}{i}"))
+                {
+                    foreach (var f in neurons[i].WeightingFactors)
+                        sw.WriteLine($"{f}");
+                }
+            }
+        }
+
         private double[] GetWeightingFactors(int n)
         {
             var factors = new double[n];

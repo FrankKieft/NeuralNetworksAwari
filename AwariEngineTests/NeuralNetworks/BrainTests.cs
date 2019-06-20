@@ -44,6 +44,14 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
             after.Should().BeGreaterThan(before);
         }
 
+        [TestMethod]
+        public void Can_store_weightfactors()
+        {
+            var brain = new Brain(new Randomizer());
+
+            brain.StoreWeightFactors();
+        }
+
         private void BrainTest(double factor, double expected)
         {
             _randomizer.GetDouble().Returns(factor);
