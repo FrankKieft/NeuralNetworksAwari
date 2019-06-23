@@ -1,39 +1,69 @@
-﻿using NeuralNetworksAwari.AwariEngine.NeuralNetworks;
-using NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces;
-using NeuralNetworksAwari.AwariEngine.Util;
-using System;
-using System.IO;
+﻿using NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces;
 using System.Linq;
 
-namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
+namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
 {
-    public class Brain
+    public class Brain: IBrain
     {
-        private const int AWARI_PARAMETERS = 12 * 47 + 48;
-        private const int INPUT_NEURONS = 6 * 48;
-        private const int INTERMEDIATE_NEURONS = 4 * 48;
-        private const int OUTPUT_NEURONS = 2 * 48 + 1;
+        private const int NUMBER_OF_AWARI_PARAMETERS = 12 * 47 + 48;
 
-        private const double FACTOR = 0.01d;
+        private const int NUMBER_OF_INPUT_NEURONS = 6 * 48;
+        private const string INPUT_FILE = "input_";
 
-        private IRandomizer _randomizer;
-        private readonly IFactorRepository repository;
-        private readonly InputNeuron[] _inputs;
-        private readonly IntermediateNeuron[] _intermediates;
-        private readonly OutputNeuron[] _outputs;
+        private const int NUMBER_OF_INTERMEDIATE_NEURONS = 4 * 48;
+        private const string INTERMEDIATE_FILE = "intermediate_";
 
-        public Brain(IRandomizer randomizer, IFactorRepository repository)
+        private const int NUMBER_OF_OUTPUT_NEURONS = 2 * 48 + 1;
+        private const string OUTPUT_FILE = "output_";
+
+        private const double LEARN_FACTOR = 0.01d;
+
+        private readonly IWeightingFactorsRepository _repository;
+        private InputNeuron[] _inputs;
+        private IntermediateNeuron[] _intermediates;
+        private OutputNeuron[] _outputs;
+
+        public Brain(IWeightingFactorsRepository repository)
         {
-            _randomizer = randomizer;
-            this.repository = repository;
-            _inputs = Enumerable.Range(0, INPUT_NEURONS).ToList()
-                .Select(x => new InputNeuron(x, GetWeightingFactors(AWARI_PARAMETERS))).ToArray();
+            _repository = repository;
+        }
 
-            _intermediates = Enumerable.Range(0, INTERMEDIATE_NEURONS).ToList()
-                .Select(x => new IntermediateNeuron(x, GetWeightingFactors(INPUT_NEURONS), _inputs)).ToArray();
+        public void BuildNeuronLayers()
+        { 
+            if (_repository.HasWeightingFactors)
+            {
+                _inputs = Enumerable.Range(0, NUMBER_OF_INPUT_NEURONS)
+                    .ToList()
+                    .Select(x => new InputNeuron(x, _repository.Read(INPUT_FILE, x)))
+                    .ToArray();
 
-            _outputs = Enumerable.Range(0, OUTPUT_NEURONS).ToList()
-                .Select(x => new OutputNeuron(x, GetWeightingFactors(INTERMEDIATE_NEURONS), _intermediates)).ToArray();
+                _intermediates = Enumerable
+                    .Range(0, NUMBER_OF_INTERMEDIATE_NEURONS).ToList()
+                    .Select(x => new IntermediateNeuron(x, _repository.Read(INTERMEDIATE_FILE, x),_inputs))
+                    .ToArray();
+
+                _outputs = Enumerable.Range(0, NUMBER_OF_OUTPUT_NEURONS)
+                    .ToList()
+                    .Select(x => new OutputNeuron(x, _repository.Read(OUTPUT_FILE, x), _intermediates))
+                    .ToArray();
+            }
+            else
+            {
+                _inputs = Enumerable.Range(0, NUMBER_OF_INPUT_NEURONS)
+                    .ToList()
+                    .Select(x => new InputNeuron(x, _repository.Create(NUMBER_OF_AWARI_PARAMETERS)))
+                    .ToArray();
+
+                _intermediates = Enumerable.Range(0, NUMBER_OF_INTERMEDIATE_NEURONS)
+                    .ToList()
+                    .Select(x => new IntermediateNeuron(x, _repository.Create(NUMBER_OF_INPUT_NEURONS), _inputs))
+                    .ToArray();
+
+                _outputs = Enumerable.Range(0, NUMBER_OF_OUTPUT_NEURONS)
+                    .ToList()
+                    .Select(x => new OutputNeuron(x, _repository.Create(NUMBER_OF_INTERMEDIATE_NEURONS), _intermediates))
+                    .ToArray();
+            }
         }
 
         /// <summary>
@@ -65,55 +95,22 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
         public void Learn(int[] pits, int capturedStones, int score)
         {
             var scores = Evaluate(pits, capturedStones);
-
-            var highScores = scores.ToList().OrderByDescending(x => x.Value).ToList();
-            var i = 0;
-            while ((i == 0 || highScores[i].Value >= 1d) && i != score + 48 && highScores[i].Value > 0d)
+            var expectedIndex = score + 48;
+            
+            for (var i=0; i<97; i++)
             {
-                highScores[i++].Learn(-FACTOR);
-
-            }
-
-            if (scores[48 + score].Value < 1d)
-            {
-                scores[48 + score].Learn(FACTOR);
+                if (scores[i].Index == expectedIndex)
+                {
+                    scores[i].Learn(LEARN_FACTOR);
+                }
             }
         }
         
         public void StoreWeightFactors()
         {
-            StoreWeightFactors("input", _inputs);
-            StoreWeightFactors("intermediate", _inputs);
-            StoreWeightFactors("output", _inputs);
-        }
-
-        public void StoreWeightFactors(string name, INeuron[] neurons)
-        {
-            var directory = $"{Environment.CurrentDirectory}\\factors";
-
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-            
-            for (var i=0; i< neurons.Length; i++)
-            {
-                using (var sw = new StreamWriter($"{directory}\\{name}{i}"))
-                {
-                    foreach (var f in neurons[i].WeightingFactors)
-                        sw.WriteLine($"{f}");
-                }
-            }
-        }
-
-        private double[] GetWeightingFactors(int n)
-        {
-            var factors = new double[n];
-            for(var i=0; i<factors.Length; i++)
-            {
-                factors[i] = _randomizer.GetDouble();
-            }
-            return factors;
+            _repository.Store(INPUT_FILE, _inputs);
+            _repository.Store(INTERMEDIATE_FILE, _intermediates);
+            _repository.Store(OUTPUT_FILE, _outputs);
         }
     }
 }
