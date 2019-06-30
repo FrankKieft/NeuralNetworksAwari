@@ -36,16 +36,7 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
         {
             foreach (var n in _previousNeuronLayer)
             {
-                if (n.Signal)
-                {
-                    n.Learn(factor);
-                    WeightingFactors[n.Index] += factor;
-                }
-                else
-                {
-                    n.Learn(-factor);
-                    WeightingFactors[n.Index] -= factor;
-                }
+                WeightingFactors[n.Index] += n.Signal ? factor : -factor;
             }
         }
     }

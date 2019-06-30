@@ -1,4 +1,5 @@
 ﻿using NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces;
+using System;
 using System.Linq;
 
 namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
@@ -16,16 +17,16 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
         private const int NUMBER_OF_OUTPUT_NEURONS = 2 * 48 + 1;
         private const string OUTPUT_FILE = "output_";
 
-        private const double LEARN_FACTOR = 0.01d;
-
         private readonly IWeightingFactorsRepository _repository;
+        private readonly double _learningFactor;
         private InputNeuron[] _inputs;
         private IntermediateNeuron[] _intermediates;
         private OutputNeuron[] _outputs;
 
-        public Brain(IWeightingFactorsRepository repository)
+        public Brain(IWeightingFactorsRepository repository, double learningFactor=0.01d)
         {
             _repository = repository;
+            _learningFactor = learningFactor;
         }
 
         public void BuildNeuronLayers()
@@ -95,15 +96,16 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
         public void Learn(int[] pits, int capturedStones, int score)
         {
             var scores = Evaluate(pits, capturedStones);
-            var expectedIndex = score + 48;
-            
-            for (var i=0; i<97; i++)
-            {
-                if (scores[i].Index == expectedIndex)
-                {
-                    scores[i].Learn(LEARN_FACTOR);
-                }
-            }
+
+            var positive = _outputs[score + 48];
+            positive.Learn(_learningFactor);
+            _intermediates.ToList().ForEach(x=>x.Learn(x.Signal ? _learningFactor : -_learningFactor));
+            _inputs.ToList().ForEach(x => x.Learn(x.Signal ? _learningFactor : -_learningFactor));
+
+            scores = Evaluate(pits, capturedStones);
+            var negatives = scores.Where(x => x.Index != positive.Index);
+            var sum = negatives.Sum(x => x.Value);
+            negatives.ToList().ForEach(x => x.Learn((x.Value/sum)*-_learningFactor));
         }
         
         public void StoreWeightFactors()

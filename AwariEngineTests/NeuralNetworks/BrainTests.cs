@@ -4,6 +4,8 @@ using NeuralNetworksAwari.AwariEngine.NeuralNetworks;
 using NeuralNetworksAwari.AwariEngine.NeuralNetworks.Interfaces;
 using NeuralNetworksAwari.AwariEngine.Util;
 using NSubstitute;
+using System;
+using System.Linq;
 
 namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
 {
@@ -40,17 +42,37 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
         [TestMethod]
         public void The_brain_can_learn_because_likelyness_of_preferred_outcome_is_higher()
         {
-            var brain = new Brain(new WeightingFactorsRepository(new Randomizer()));
+            var brain = new Brain(new WeightingFactorsRepository(new Randomizer()), learningFactor: 0.01d);
             brain.BuildNeuronLayers();
-
-            var before = brain.Evaluate(_testPosition, 0)[48].Value;
+            
+            var scores = brain.Evaluate(_testPosition, 0);
+            var before = scores[48].Value;
+            WriteScores(scores);
 
             brain.Learn(_testPosition, 0, 0);
 
-            var scores = brain.Evaluate(_testPosition, 0);
+            scores = brain.Evaluate(_testPosition, 0);
+            var after = scores[48].Value;
+            WriteScores(scores);
 
-            scores[48].Value.Should().BeGreaterThan(before);
+            after.Should().BeGreaterThan(before);
         }
+
+        private void WriteScores(IOutput[] scores)
+        {
+            var orderedScores = scores.ToList().OrderByDescending(x => x.Value).ToArray();
+            
+            Console.WriteLine("Scores:");
+            Console.WriteLine("=======");
+            for (var i = 0; i < scores.Length; i++)
+            {
+                Console.WriteLine($"{GetIndex(scores, i)} - {GetScore(scores, i)}          {GetIndex(orderedScores, i)} - {GetScore(orderedScores, i)}");
+            }
+            Console.WriteLine("");
+        }
+
+        private string GetIndex(IOutput[] s, int i) => $"    {s[i].Index}".Substring($"{s[i].Index}".Length);
+        private string GetScore(IOutput[] s, int i) => $"{Math.Round(s[i].Value, 5)}0000".Substring(0,7);
 
         [TestMethod]
         public void Can_store_weightfactors()

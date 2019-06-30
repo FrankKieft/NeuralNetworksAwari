@@ -55,28 +55,14 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
         {
             for (var i = 0; i < 48; i++)
             {
-                if (i < _stonesCaptured)
-                {
-                    WeightingFactors[i] += factor;
-                }
-                else
-                {
-                    WeightingFactors[i] -= factor;
-                }
+                WeightingFactors[i] += i < _stonesCaptured ? factor : -factor;
             }
 
             for (var i = 0; i < 564; i++)
             {
                 var pit = i / 47;
                 var stones = i % 47;
-                if (_pits[pit] > stones)
-                {
-                    WeightingFactors[i + 48] += factor;
-                }
-                else
-                {
-                    WeightingFactors[i + 48] -= factor;
-                }
+                WeightingFactors[i + 48] += _pits[pit] > stones ? factor: -factor;
             }
         }
     }

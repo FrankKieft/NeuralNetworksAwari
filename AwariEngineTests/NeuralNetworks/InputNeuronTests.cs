@@ -21,25 +21,29 @@ namespace NeuralNetworksAwari.AwariEngineTests.NeuralNetworks
         }
 
         [TestMethod]
-        public void InputNeuron_decreases_the_weighting_factors_with_1_percent_when_input_signal_was_1()
+        public void InputNeuron_can_increases_the_weighting_factors_for_positives_with_1_percent()
         {
-            LearningTest(new[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0.51d);
+            LearningTest(0.01d);
         }
 
         [TestMethod]
-        public void InputNeuron_decreases_the_weighting_factors_with_1_percent_when_input_signal_was_0()
+        public void InputNeuron_can_decrease_the_weighting_factors_for_positives_with_1_percent()
         {
-            LearningTest(new[] { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0.49d);
+            LearningTest(-0.01d);
         }
 
-        private void LearningTest(int[] pits, double expected)
+        private void LearningTest(double factor)
         {
+            var pits = new[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             var weightingFactors = Enumerable.Range(0, 12 * 47 + 48).ToList().Select(x => 0.5d).ToArray();
             var neuron = new InputNeuron(0, weightingFactors);
             neuron.AcceptAwariPits(pits, 47);
-            neuron.Learn(0.01d);
+            neuron.Learn(factor);
 
-            neuron.WeightingFactors[48].Should().Be(expected);
+            neuron.WeightingFactors[46].Should().Be(0.5d + factor);
+            neuron.WeightingFactors[47].Should().Be(0.5d - factor);
+            neuron.WeightingFactors[48].Should().Be(0.5d + factor);
+            neuron.WeightingFactors[49].Should().Be(0.5d - factor);
         }
 
         private void NeuronTest(double factor, bool expected)
