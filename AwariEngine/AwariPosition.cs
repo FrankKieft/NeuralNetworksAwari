@@ -42,6 +42,13 @@ namespace NeuralNetworksAwari.AwariEngine
             return p;
         }
 
+        public int[] GetPits()
+        {
+            var p = new int[12];
+            Array.Copy(Position, 0, p, 0, 12);
+            return p;
+        }
+
         public List<int> CanSow()
         {
             var pits = new List<int>();

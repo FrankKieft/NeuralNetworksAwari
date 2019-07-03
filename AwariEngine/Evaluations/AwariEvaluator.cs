@@ -20,45 +20,28 @@ namespace NeuralNetworksAwari.AwariEngine.Evaluations
                 return position.Position[AwariPosition.SOUTH_AWARI] - position.Position[AwariPosition.NORTH_AWARI];
             }
 
-            var finalEvaluationResult = -1000;
-            var score = 0;
-            for(var i= 0; i<6; i++)
+            var moves = position.CanSow();
+            if (moves.Count==0)
             {
-                if (position.Position[i] == 0)
-                {
-                    continue;
-                }
-                position.Sow(i);
+                return position.Position[AwariPosition.SOUTH_AWARI] - position.Position[AwariPosition.NORTH_AWARI];
+            }
 
-                var evaluationResult = -EvaluateRecursive(position, depth - 1);
-                if (evaluationResult > finalEvaluationResult)
+            var score = -1000;
+            foreach(var move in moves)
+            {
+                position.Sow(move);
+
+                var eval = -EvaluateRecursive(position, depth - 1);
+
+                if (eval > score)
                 {
-                    if (evaluationResult == 1000)
-                    {
-                        if (finalEvaluationResult < -800)
-                        {
-                            if (finalEvaluationResult < -900)
-                            {
-                                finalEvaluationResult = -900;
-                                score = position.Position[AwariPosition.NORTH_AWARI]-position.Position[AwariPosition.SOUTH_AWARI];
-                            }
-                            else
-                            {
-                                if (score < position.Position[AwariPosition.SOUTH_AWARI] - position.Position[AwariPosition.NORTH_AWARI])
-                                    score = position.Position[AwariPosition.SOUTH_AWARI] - position.Position[AwariPosition.NORTH_AWARI];
-                            }
-                        }
-                    }                    
-                    else
-                    {
-                        finalEvaluationResult = evaluationResult;
-                    }
+                    score = eval;
                 }
-                
+
                 position.MoveBack();
             }
 
-            return finalEvaluationResult == -900 ? score: finalEvaluationResult;
+            return score;
         }
     }
 }

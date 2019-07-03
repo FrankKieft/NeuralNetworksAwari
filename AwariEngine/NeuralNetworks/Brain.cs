@@ -96,7 +96,7 @@ namespace NeuralNetworksAwari.AwariEngine.NeuralNetworks
         public void Learn(int[] pits, int capturedStones, int score)
         {
             var scores = Evaluate(pits, capturedStones);
-
+            
             var positive = _outputs[score + 48];
             positive.Learn(_learningFactor);
             _intermediates.ToList().ForEach(x=>x.Learn(x.Signal ? _learningFactor : -_learningFactor));

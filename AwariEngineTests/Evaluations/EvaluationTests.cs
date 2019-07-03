@@ -96,6 +96,19 @@ namespace NeuralNetworksAwari.AwariEngineTests.Evaluations
         }
 
         [TestMethod]
+        public void Can_correctly_calculate_with_three_stones()
+        {
+            // F can be played, gain of 12
+            var board = new AwariBoard(
+                A: 1, D: 1,
+                f: 1,
+                southAwari: 0,
+                northAwari: 45);
+
+            board.Evaluate(_evaluator, 4).Should().Be(-42);
+        }
+
+        [TestMethod]
         public void I_can_get_the_best_score_for_the_initial_board_4_moves()
         {
             var board = AwariBoard.GetInitialBoard();

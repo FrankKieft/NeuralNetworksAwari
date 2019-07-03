@@ -15,5 +15,15 @@ namespace NeuralNetworksAwari.AwariEngine.Util
         {
             return _random.NextDouble();
         }
+
+        public int Next(int maxValue)
+        {
+            return _random.Next(maxValue);
+        }
+
+        public int Next(int minValue, int maxValue)
+        {
+            return _random.Next(minValue, maxValue);
+        }
     }
 }
